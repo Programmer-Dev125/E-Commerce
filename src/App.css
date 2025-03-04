@@ -1521,6 +1521,7 @@ textarea:focus {
   display: none;
   font-size: 16px;
   color: #ffffff;
+  cursor: pointer;
 }
 
 .contact-icon {
