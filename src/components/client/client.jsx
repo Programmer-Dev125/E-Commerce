@@ -3,10 +3,13 @@ import About from "./about/about";
 import Contact from "./contact/contact";
 import Content from "./content/content";
 import NavBarClient from "./navbar/navbar";
-import Product from "./product/product";
 import Testimonial from "./testimonial/testimonial";
 import { handleObserver } from "./animations/observer";
 import Footer from "./footer/footer";
+import { lazy } from "react";
+import { Suspense } from "react";
+
+const Products = lazy(() => import("./product/product.jsx"));
 
 export default function ClientPage() {
   useEffect(() => {
@@ -23,7 +26,9 @@ export default function ClientPage() {
         <Content />
       </section>
       <section className="product-section w95 mauto">
-        <Product />
+        <Suspense fallback={<h2>Loading...</h2>}>
+          <Products />
+        </Suspense>
       </section>
       <section className="testimonial-section w95 mauto">
         <Testimonial />
