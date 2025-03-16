@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ErrorPage from "./components/404Page/error.jsx";
 import Nav from "./components/admin/admin.jsx";
-import ClientPage from "./components/client/client.jsx";
+import Client from "./components/client/client.jsx";
 
 export default function App() {
   const [isError, setIsError] = useState(false);
@@ -19,10 +19,10 @@ export default function App() {
         </div>
       </div>
     );
-  } else if (path === "/") {
+  } else if (path === "/" || path === "/products") {
     return (
       <div className="client-page">
-        <ClientPage />
+        <Client />
       </div>
     );
   } else {
