@@ -1,9 +1,9 @@
-import { gitHub, linkedin, upwork } from "./svg/paths";
+import { gitHub, linkedin, upwork } from "../svg/paths";
 
 export default function Footer() {
   return (
     <footer>
-      <div className="w90 mauto flex-box-row sp-between align-start">
+      <div className="w90 mauto flex-box-row sp-between align-start footer-row">
         <div className="flex-box-col g40">
           <p className="mt0 mb0 client-white-title wfit">Pages</p>
           <div className="flex-box-col g20">
@@ -21,7 +21,7 @@ export default function Footer() {
             </p>
           </div>
         </div>
-        <div className="flex-box-row w10 sp-between align-center">
+        <div className="flex-box-row w10 sp-between align-center footer-circle-row">
           <div className="footer-circle">{linkedin}</div>
           <div className="footer-circle">{gitHub}</div>
           <div className="footer-circle">{upwork}</div>

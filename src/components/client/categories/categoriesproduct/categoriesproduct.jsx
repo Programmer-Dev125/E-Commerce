@@ -1,9 +1,11 @@
-import { cartIcon, data, starIcons } from "./data";
+import { cartIcon, starIcons } from "../../svg/paths";
+import { data } from "../../data/data";
+
 export default function CategoriesProduct() {
   return (
-    <div className="flex-box-row wrap g45 sp-start">
+    <div className="get-categories">
       {data.map((cart) => (
-        <div key={cart.id} className="flex-box-col w23">
+        <div key={cart.id} className="flex-box-col w100 mb60">
           <div className="relative cart-box">
             <img src={cart.img} alt="img" className="cart-img" />
             <div className="cart-tag">{cartIcon}</div>

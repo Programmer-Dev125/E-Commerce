@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { data } from "./data";
+import { headerCarousel } from "../../data/data";
 
-export default function HeaderCarousel() {
+export default function HeaderCarousel({ onBuy }) {
   const [carouselId, setCarouselId] = useState(1);
 
   function handleCarousel(e) {
@@ -11,17 +11,22 @@ export default function HeaderCarousel() {
   }
   return (
     <div className="w35 header-carousel-div">
-      {data.map(
+      {headerCarousel.map(
         (carousel) =>
           carouselId === carousel.id && (
             <div key={carousel.id} className="flex-box-col g20 carousel-data">
               <img src={carousel.img} alt="Image text" />
               <div className="mb10">
-                <p className="mt0 mb0 client-white-title">{carousel.title}</p>
+                <p className="mt0 mb0 client-white-title">{carousel.name}</p>
                 <p className="mt10 mb0 client-price-text">{carousel.price}</p>
               </div>
               <div className="w50">
-                <button className="header-buy-btn">Buy</button>
+                <button
+                  className="header-buy-btn"
+                  onClick={() => onBuy(true, carousel.name, carousel.price)}
+                >
+                  Buy
+                </button>
               </div>
             </div>
           )

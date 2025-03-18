@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <div className="w50">
+    <div className="w50 about-row">
       <h2 className="page-title mt0 mb40 wfit">About</h2>
       <p className="mt0 mb0 client-text ln2">
         We are thrilled to introduce you to Eternal Ink, our labor of love and

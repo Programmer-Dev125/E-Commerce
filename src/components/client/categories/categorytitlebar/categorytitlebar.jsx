@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 export default function CategoryTitleBar({ onTab }) {
   const [active, setActive] = useState({
     text: "Most Selling",
@@ -11,7 +11,7 @@ export default function CategoryTitleBar({ onTab }) {
     if (!tab) return;
     setActive({
       text: tab.textContent,
-      left: "0px",
+      left: "${tab.offsetLeft}px",
       width: `${tab.offsetWidth}px`,
     });
     onTab("Most Selling");
@@ -29,11 +29,11 @@ export default function CategoryTitleBar({ onTab }) {
   }
 
   return (
-    <div className="flex-box-row sp-between align-center">
+    <div className="flex-box-row sp-between align-center category-title-bar">
       <h2 className="page-title">Categories</h2>
       <div
         onClick={handleTab}
-        className="w35 flex-box-row sp-between align-center relative text-end bottom"
+        className="w35 flex-box-row sp-between align-center relative bottom"
       >
         <p
           className={`tab-text ${

@@ -6,13 +6,19 @@ import Contact from "./contact/contact.jsx";
 import Footer from "./footer/footer.jsx";
 import Header from "./header/header.jsx";
 import Products from "./products/products.jsx";
-import Cart from "./cart/cart.jsx";
-import User from "./user/user.jsx";
-import Register from "./register/register.jsx";
+import User from "./header/user/user.jsx";
+import Cart from "./header/cart/cart.jsx";
 import ProductBuy from "./products/product/buy/productbuy.jsx";
+import SearchCard from "./header/search/searchcard.jsx";
+
 export default function Client() {
   const [current, setCurrent] = useState(window.location.pathname);
-  const [isUser, setIsUser] = useState(false);
+  const [searchModal, setSearchModal] = useState(false);
+  const [userModal, setUserModal] = useState(false);
+  const [cartModal, setCartModal] = useState(false);
+  const [productModal, setProductModal] = useState(false);
+  const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState("");
 
   useEffect(() => {
     function handleHistory() {
@@ -30,17 +36,31 @@ export default function Client() {
 
   return (
     <section className="flex-box-col g130">
+      <Header
+        isCurr={current}
+        onRoute={(val) => {
+          window.history.pushState({}, "", val);
+          window.dispatchEvent(new Event("pushState")); // Notify React about route change
+          setCurrent(val);
+        }}
+        onUserModal={(val) => setUserModal(val)}
+        onCartModal={(val) => setCartModal(val)}
+        onSearchModal={(val) => setSearchModal(val)}
+        onBuy={(val, name, price) => {
+          setProductModal(val);
+          setProductName(name);
+          setProductPrice(price);
+        }}
+      />
       {current === "/" && (
         <>
-          <Header
-            isCurr={current}
-            onRoute={(val) => {
-              window.history.pushState({}, "", val);
-              window.dispatchEvent(new Event("pushState")); // Notify React about route change
-              setCurrent(val);
+          <BestSeller
+            onBuy={(val, name, price) => {
+              setProductModal(val);
+              setProductName(name);
+              setProductPrice(price);
             }}
           />
-          <BestSeller />
           <Categories />
           <AboutReview />
           <Contact />
@@ -48,21 +68,35 @@ export default function Client() {
       )}
       {current === "/products" && (
         <>
-          <Header
-            isCurr={current}
-            onRoute={(val) => {
-              window.history.pushState({}, "", val);
-              window.dispatchEvent(new Event("pushState")); // Notify React about route change
-              setCurrent(val);
+          <Products
+            onBuy={(val, name, price) => {
+              setProductModal(val);
+              setProductName(name);
+              setProductPrice(price);
             }}
           />
-          <Products />
         </>
       )}
+      {userModal && <User onUserModal={(val) => setUserModal(val)} />}
+      {cartModal && (
+        <Cart
+          onCartModal={(val) => setCartModal(val)}
+          onBuyModal={(val, title, price) => {
+            setProductModal(val);
+            setProductName(title);
+            setProductPrice(price);
+          }}
+        />
+      )}
+      {productModal && (
+        <ProductBuy
+          user={productName}
+          price={productPrice}
+          onClose={(val) => setProductModal(val)}
+        />
+      )}
+      {searchModal && <SearchCard onClose={(val) => setSearchModal(val)} />}
       <Footer />
-      <Cart />
-      <User onModal={(val) => setIsUser(val)} />
-      {isUser && <Register onClose={(val) => setIsUser(val)} />}
     </section>
   );
 }

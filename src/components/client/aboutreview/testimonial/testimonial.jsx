@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { starIcon, data } from "./data";
+import { starIcons } from "../../svg/paths";
+import { testimonial } from "../../data/data";
 
 export default function Testimonial() {
   const [testimonialId, setTestimonialId] = useState(1);
@@ -11,14 +12,14 @@ export default function Testimonial() {
   }
 
   return (
-    <div className="w40">
+    <div className="w40 testimonial-side">
       <h2 className="page-title wfit mt0 mb40">Testimonial</h2>
-      {data.map(
+      {testimonial.map(
         (review) =>
           testimonialId === review.id && (
             <div key={review.id} className="review-card flex-box-col g40 p20">
               <div className="flex-box-row align-center sp-between">
-                <div>{starIcon}</div>
+                <div>{starIcons}</div>
                 <p className="mt0 mb0 client-text-sec">{review.time}</p>
               </div>
               <div>

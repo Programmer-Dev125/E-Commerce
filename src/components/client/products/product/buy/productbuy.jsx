@@ -1,4 +1,4 @@
-import { starIcons } from "../data.jsx";
+import { starIcons } from "../../../svg/paths";
 export default function ProductBuy({ user, price, onClose }) {
   function handleClose(e) {
     e.stopPropagation();

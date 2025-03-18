@@ -1,32 +1,39 @@
-import { cartIcon } from "../svg/path";
-export default function SearchCard() {
+import { data } from "../../data/data";
+import { starIcons, cartBlackIcon } from "../../svg/paths";
+export default function SearchCard({ onClose }) {
+  function handleModalClose(e) {
+    e.stopPropagation();
+    if (e.target.classList.contains("search-modal")) {
+      onClose(false);
+      document.body.classList.remove("no-scroll");
+    }
+  }
   return (
-    <div className="search-card flex-box-col g20">
-      <div className="flex-box-row sp-between align-center divider pb10">
-        <div className="w65 flex-box-row sp-between align-center">
-          <div className="w30">
-            <img
-              src="/assets/client-images/user-img.png"
-              alt="user"
-              className="search-card-img"
-            />
-          </div>
-          <div className="w70">
-            <p className="mt0 mb0 client-title">Fountain Pen</p>
-            <p className="mt5 mb0 client-price-text">445$</p>
-          </div>
-        </div>
-        <div className="w30 text-end">
-          <svg
-            width="30"
-            height="30"
-            viewBox="0 0 31 30"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+    <div className="search-modal" onClick={handleModalClose}>
+      <div className="search-modal-content flex-box-col g20">
+        <input type="text" placeholder="Enter Product Name" />
+        {data.map((search) => (
+          <div
+            key={search.id}
+            className="flex-box-row sp-between align-center pr10 pl10 bottom pb10"
           >
-            {cartIcon}
-          </svg>
-        </div>
+            <div className="flex-box-row align-center">
+              <div>
+                <img
+                  src={search.img}
+                  alt="Search Image"
+                  className="sq-img mr20"
+                />
+              </div>
+              <div>
+                <p className="mt0 mb0 client-title">{search.name}</p>
+                <p className="mt5 mb0 client-price-text">{search.price}</p>
+                <div className="mt5">{starIcons}</div>
+              </div>
+            </div>
+            <div className="pointer">{cartBlackIcon}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
