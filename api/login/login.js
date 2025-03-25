@@ -1,5 +1,15 @@
 import { token } from "../jwt.js";
-export async function handleLogin(model, req, res) {
+import { model } from "../app.js";
+import { handleHeader } from "../commonheader.js";
+export default async function handleLogin(req, res) {
+  handleHeader(res);
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
+
   let isBody = "";
   req.on("data", (data) => {
     isBody += data;

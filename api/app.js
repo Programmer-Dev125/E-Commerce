@@ -15,7 +15,7 @@ if (!conn) {
   throw new Error("error creating connection");
 }
 
-const model = conn.model(
+export const model = conn.model(
   "isModal",
   new Schema(
     { id: Number, name: String, password: String },
@@ -27,7 +27,7 @@ const model = conn.model(
   process.env.ADMIN
 );
 
-const productModel = conn.model(
+export const productModel = conn.model(
   "productModel",
   new Schema(
     {
@@ -45,7 +45,7 @@ const productModel = conn.model(
   process.env.PRODUCTS
 );
 
-const clientsModal = conn.model(
+export const clientsModal = conn.model(
   "clientModal",
   new Schema(
     {
@@ -65,7 +65,7 @@ const clientsModal = conn.model(
   process.env.USER
 );
 
-const contactModel = conn.model(
+export const contactModel = conn.model(
   "contactModel",
   new Schema(
     {
