@@ -1,45 +1,114 @@
+import { useEffect, useRef, useState } from "react";
+import Login from "./login/login";
+import Signup from "./signup/signup";
+
 export default function User({ onUserModal }) {
+  const [hasUser, setHasUser] = useState({
+    bool: false,
+    user: "",
+    email: "",
+  });
+  const [isLogin, setIsLogin] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [line, setLine] = useState({
+    text: "Sign up",
+    left: "",
+    width: "",
+  });
+  const isRef = useRef(null);
+
   function handleClose(e) {
     e.stopPropagation();
-    if (
-      e.target.classList.contains("user-modal") ||
-      e.target.tagName === "BUTTON"
-    ) {
+    if (e.target.classList.contains("user-modal")) {
       onUserModal(false);
       document.body.classList.remove("no-scroll");
     }
   }
-  function handleSubmit(e) {
-    e.preventDefault();
-    handleClose(e);
+  useEffect(() => {
+    if (!isRef.current) return;
+    const active = isRef.current.querySelector(".user-text.active");
+    if (active) {
+      setLine({
+        text: "Sign up",
+        left: `${active.offsetLeft}px`,
+        width: `${active.offsetWidth}px`,
+      });
+    }
+    const db = indexedDB.open("client-db");
+    db.addEventListener("upgradeneeded", (e) => {
+      const database = e.target.result;
+      database.createObjectStore("client-user", { keyPath: "id" });
+    });
+    db.addEventListener("success", (e) => {
+      const database = e.target.result;
+      const hasUser = database
+        .transaction("client-user")
+        .objectStore("client-user")
+        .get(1);
+      hasUser.addEventListener("success", (ev) => {
+        const data = ev.target.result;
+        if (!data) return;
+        if (localStorage.getItem("user")) {
+          setHasUser({
+            user: data.name,
+            email: data.email,
+            bool: true,
+          });
+        }
+      });
+    });
+  }, [isUpdate]);
+
+  function handleTab(e) {
+    e.stopPropagation();
+    if (e.target.tagName !== "P") return;
+    setLine({
+      text: e.target.textContent,
+      left: `${e.target.offsetLeft}px`,
+      width: `${e.target.offsetWidth}px`,
+    });
+    e.target.textContent === "Sign up" ? setIsLogin(false) : setIsLogin(true);
   }
   return (
-    <div className="user-modal" onClick={handleClose}>
+    <div className="user-modal" onClick={handleClose} ref={isRef}>
       <div className="user-modal-content">
-        <h2 className="page-title wfit mt0 mb30">Signup/Login</h2>
-        <form onSubmit={handleSubmit} className="flex-box-col g30">
+        {hasUser.bool ? (
           <div>
-            <label htmlFor="username" className="isBlock client-text mb10">
-              Name
-            </label>
-            <input type="text" id="username" />
+            <h2 className="mt0 mb0 page-title wfit">Welcome! {hasUser.user}</h2>
+            <p className="mt5 mb0 client-text-sec">{hasUser.email}</p>
           </div>
-          <div>
-            <label htmlFor="useremail" className="isBlock client-text mb10">
-              Email
-            </label>
-            <input type="text" id="useremail" />
-          </div>
-          <div>
-            <label htmlFor="userpassword" className="isBlock client-text mb10">
-              Password
-            </label>
-            <input type="text" id="userpassword" />
-          </div>
-          <div className="w40">
-            <button>SignUp/Login</button>
-          </div>
-        </form>
+        ) : (
+          <>
+            <div
+              className="relative flex-box-row align-center sp-around bottom mb40"
+              onClick={handleTab}
+            >
+              <p
+                className={`mb0 mt0 user-text pointer pb15 pl10 pr10 ${
+                  line.text === "Sign up" ? "active" : ""
+                }`}
+              >
+                Sign up
+              </p>
+              <p
+                className={`mb0 mt0 user-text pointer pb15 pl10 pr10 ${
+                  line.text === "Login" ? "active" : ""
+                }`}
+              >
+                Login
+              </p>
+              <div
+                className="user-underline"
+                style={{ width: line.width, left: line.left }}
+              ></div>
+            </div>
+            {isLogin ? (
+              <Login onUpdate={(val) => setIsUpdate(val)} />
+            ) : (
+              <Signup onUpdate={(val) => setIsUpdate(val)} />
+            )}
+          </>
+        )}
       </div>
     </div>
   );

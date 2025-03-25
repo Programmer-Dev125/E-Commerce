@@ -11,6 +11,7 @@ export default function Header({
   onCartModal,
   onSearchModal,
   onBuy,
+  data,
 }) {
   function handleSection(e) {
     e.stopPropagation();
@@ -83,7 +84,8 @@ export default function Header({
           style={{ zIndex: "2" }}
         >
           <HeaderCarousel
-            onBuy={(val, name, price) => onBuy(val, name, price)}
+            onBuy={(val, name, price, img) => onBuy(val, name, price, img)}
+            data={data}
           />
           <HeaderAbout />
         </section>

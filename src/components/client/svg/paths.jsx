@@ -63,6 +63,26 @@ export const starIcons = (
     />
   </svg>
 );
+export const closeIcon = (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    className="close-icon"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M2 2L22 22M2 22L22 2"
+      stroke="#FF1601"
+      className="close-icon"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const linkedin = (
   <svg
     width="20"

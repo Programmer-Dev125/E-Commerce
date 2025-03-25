@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { headerCarousel } from "../../data/data";
+import { useState, useMemo } from "react";
 
-export default function HeaderCarousel({ onBuy }) {
+export default function HeaderCarousel({ onBuy, data }) {
   const [carouselId, setCarouselId] = useState(1);
+  const isData = useMemo(() => {
+    return data.filter((data) => data.id <= 3);
+  }, [data]);
 
   function handleCarousel(e) {
     if (!e.target.classList.contains("header-carousel-circle")) return;
@@ -11,11 +13,14 @@ export default function HeaderCarousel({ onBuy }) {
   }
   return (
     <div className="w35 header-carousel-div">
-      {headerCarousel.map(
+      {isData.map(
         (carousel) =>
           carouselId === carousel.id && (
             <div key={carousel.id} className="flex-box-col g20 carousel-data">
-              <img src={carousel.img} alt="Image text" />
+              <img
+                src={`http://localhost:3000${carousel.img}`}
+                alt="Image text"
+              />
               <div className="mb10">
                 <p className="mt0 mb0 client-white-title">{carousel.name}</p>
                 <p className="mt10 mb0 client-price-text">{carousel.price}</p>
@@ -23,7 +28,9 @@ export default function HeaderCarousel({ onBuy }) {
               <div className="w50">
                 <button
                   className="header-buy-btn"
-                  onClick={() => onBuy(true, carousel.name, carousel.price)}
+                  onClick={() =>
+                    onBuy(true, carousel.name, carousel.price, carousel.img)
+                  }
                 >
                   Buy
                 </button>

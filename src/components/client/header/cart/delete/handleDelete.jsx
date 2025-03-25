@@ -1,0 +1,86 @@
+export async function handleDelete(
+  name,
+  setCarts,
+  carts,
+  setReceived,
+  setResponse
+) {
+  const db = indexedDB.open("client-db");
+  db.addEventListener("success", (e) => {
+    const database = e.target.result;
+    const isGet = database
+      .transaction("client-user")
+      .objectStore("client-user")
+      .get(1);
+    isGet.addEventListener("success", async (ev) => {
+      const user = ev.target.result;
+      const isFetch = await fetch("http://localhost:3000/del-cart", {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+          "x-product-id": name,
+          "x-current-user": JSON.stringify(user),
+        },
+        credentials: "include",
+      });
+      switch (isFetch.status) {
+        case 200:
+          {
+            const isResp = await isFetch.json();
+            const updateCart = carts.filter((item) => item.name !== name);
+            setCarts(updateCart);
+            if (updateCart.length === 0) {
+              setCarts([]);
+            }
+            setReceived(true);
+            setResponse({
+              danger: false,
+              message: isResp.success,
+            });
+            setTimeout(() => {
+              setReceived(false);
+            }, 800);
+          }
+          break;
+
+        case 400:
+          {
+            const isResp = await isFetch.json();
+            setReceived(true);
+            setResponse({
+              danger: true,
+              message: isResp.error,
+            });
+            setTimeout(() => {
+              setReceived(false);
+            }, 800);
+          }
+          break;
+        case 500:
+          {
+            const isResp = await isFetch.json();
+            setReceived(true);
+            setResponse({
+              danger: true,
+              message: isResp.error,
+            });
+            setTimeout(() => {
+              setReceived(false);
+            }, 800);
+          }
+          break;
+
+        default:
+          setReceived(true);
+          setResponse({
+            danger: true,
+            message: "Invalid Request",
+          });
+          setTimeout(() => {
+            setReceived(false);
+          }, 800);
+          break;
+      }
+    });
+  });
+}

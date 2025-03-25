@@ -13,25 +13,26 @@ import SearchCard from "./header/search/searchcard.jsx";
 
 export default function Client() {
   const [current, setCurrent] = useState(window.location.pathname);
+  const [products, setProducts] = useState([]);
   const [searchModal, setSearchModal] = useState(false);
   const [userModal, setUserModal] = useState(false);
   const [cartModal, setCartModal] = useState(false);
   const [productModal, setProductModal] = useState(false);
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
+  const [productImg, setProductImg] = useState("");
 
   useEffect(() => {
     function handleHistory() {
       setCurrent(window.location.pathname);
     }
-
     window.addEventListener("popstate", handleHistory);
     window.addEventListener("pushState", handleHistory);
-
-    return () => {
-      window.removeEventListener("popstate", handleHistory);
-      window.removeEventListener("pushState", handleHistory);
-    };
+    (async () => {
+      const isFetch = await fetch("http://localhost:3000/products");
+      const isResp = await isFetch.json();
+      return setProducts(isResp);
+    })();
   }, []);
 
   return (
@@ -46,22 +47,30 @@ export default function Client() {
         onUserModal={(val) => setUserModal(val)}
         onCartModal={(val) => setCartModal(val)}
         onSearchModal={(val) => setSearchModal(val)}
-        onBuy={(val, name, price) => {
+        onBuy={(val, name, price, img) => {
           setProductModal(val);
           setProductName(name);
           setProductPrice(price);
+          setProductImg(img);
         }}
+        data={products}
       />
       {current === "/" && (
         <>
           <BestSeller
-            onBuy={(val, name, price) => {
+            onBuy={(val, name, price, img) => {
               setProductModal(val);
               setProductName(name);
               setProductPrice(price);
+              setProductImg(img);
+            }}
+            data={products}
+            onLink={(val) => {
+              window.history.pushState({}, "", val);
+              setCurrent(val);
             }}
           />
-          <Categories />
+          <Categories data={products} />
           <AboutReview />
           <Contact />
         </>
@@ -69,11 +78,13 @@ export default function Client() {
       {current === "/products" && (
         <>
           <Products
-            onBuy={(val, name, price) => {
+            onBuy={(val, name, price, img) => {
               setProductModal(val);
               setProductName(name);
               setProductPrice(price);
+              setProductImg(img);
             }}
+            data={products}
           />
         </>
       )}
@@ -81,10 +92,11 @@ export default function Client() {
       {cartModal && (
         <Cart
           onCartModal={(val) => setCartModal(val)}
-          onBuyModal={(val, title, price) => {
+          onBuyModal={(val, title, price, img) => {
             setProductModal(val);
             setProductName(title);
             setProductPrice(price);
+            setProductImg(img);
           }}
         />
       )}
@@ -92,10 +104,13 @@ export default function Client() {
         <ProductBuy
           user={productName}
           price={productPrice}
+          img={productImg}
           onClose={(val) => setProductModal(val)}
         />
       )}
-      {searchModal && <SearchCard onClose={(val) => setSearchModal(val)} />}
+      {searchModal && (
+        <SearchCard onClose={(val) => setSearchModal(val)} data={products} />
+      )}
       <Footer />
     </section>
   );

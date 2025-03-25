@@ -1,22 +1,37 @@
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import { cartBtnIcon } from "../../svg/paths";
-import { data } from "../../data/data";
 
-export default function BestProducts({ onBuy }) {
-  const [product, setProduct] = useState(500);
+export default function BestProducts({ onBuy, data }) {
+  const isRef = useRef(null);
+  useEffect(() => {
+    if (!isRef.current) return;
+    const text = isRef.current.querySelectorAll(".client-title");
+    text.forEach((text) => {
+      if (text.innerText.length >= 17) {
+        text.textContent = text.textContent.slice(0, 17) + "...";
+      }
+    });
+  }, [data]);
   return (
-    <div className="product-section-row">
+    <div className="product-section-row" ref={isRef}>
       {data.map((product) => (
         <div key={product.id} className="mr5 ml10">
-          <img src={product.img} alt="product image" />
+          <img
+            src={`http://localhost:3000${product.img}`}
+            alt="product image"
+          />
           <div className="flex-box-row sp-between mt20">
-            <p className="client-title">{product.name}</p>
+            <p className="client-title" title={product.name}>
+              {product.name}
+            </p>
             <p className="client-price-text">{product.price}</p>
           </div>
           <div className="w50 mt5">
             <div
               className="product-section-btn"
-              onClick={() => onBuy(true, product.name, product.price)}
+              onClick={() =>
+                onBuy(true, product.name, product.price, product.img)
+              }
             >
               <p className="client-text mt0 mb0">Buy</p>
               <svg
