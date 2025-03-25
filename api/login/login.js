@@ -1,21 +1,5 @@
 import { token } from "../jwt.js";
-import { model } from "../app.js";
-import { handleHeader } from "../commonheader.js";
-export default async function handleServer(req, res) {
-  handleHeader(res);
-
-  if (req.method === "OPTIONS") {
-    res.writeHead(200);
-    res.end();
-    return;
-  }
-
-  if (req.method !== "POST") {
-    res.writeHead(405);
-    res.end(JSON.stringify({ error: "Incorrect Request Method" }));
-    return;
-  }
-
+export async function handleLogin(model, req, res) {
   let isBody = "";
   req.on("data", (data) => {
     isBody += data;

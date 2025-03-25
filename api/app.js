@@ -80,7 +80,7 @@ export const contactModel = conn.model(
   process.env.CONTACT
 );
 
-export default async function handleServer() {
+export default async function handleServer(req, res) {
   if (req.url.startsWith("/images")) {
     const path = `.${req.url}`;
     if (existsSync(path)) {
@@ -115,7 +115,7 @@ export default async function handleServer() {
     case req.method === "GET" && req.url === "/products":
       handleFetch(productModel, res);
       break;
-    case req.method === "POST" && req.url === "/login":
+    case req.method === "POST" && req.url === "/api/login/login":
       handleLogin(model, req, res);
       break;
     case req.method === "POST" && req.url === "/addProduct":

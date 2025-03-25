@@ -17,7 +17,7 @@ export default function Login({ onLogin }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const isFetch = await fetch(
-      "https://e-commerce-gamma-one-65.vercel.app/api/app/login/login",
+      "https://e-commerce-gamma-one-65.vercel.app/api/login/login",
       {
         method: "POST",
         headers: {
