@@ -15,7 +15,7 @@ if (!conn) {
   throw new Error("error creating connection");
 }
 
-export const model = conn.model(
+const model = conn.model(
   "isModal",
   new Schema(
     { id: Number, name: String, password: String },
@@ -27,7 +27,7 @@ export const model = conn.model(
   process.env.ADMIN
 );
 
-export const productModel = conn.model(
+const productModel = conn.model(
   "productModel",
   new Schema(
     {
@@ -45,7 +45,7 @@ export const productModel = conn.model(
   process.env.PRODUCTS
 );
 
-export const clientsModal = conn.model(
+const clientsModal = conn.model(
   "clientModal",
   new Schema(
     {
@@ -65,7 +65,7 @@ export const clientsModal = conn.model(
   process.env.USER
 );
 
-export const contactModel = conn.model(
+const contactModel = conn.model(
   "contactModel",
   new Schema(
     {
@@ -81,6 +81,18 @@ export const contactModel = conn.model(
 );
 
 export default async function handleServer(req, res) {
+  res.setHeader(
+    "access-control-allow-origin",
+    "https://e-commerce-gamma-one-65.vercel.app"
+  );
+  res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
+  res.setHeader(
+    "access-control-allow-headers",
+    "content-type, x-product-id, x-current-user"
+  );
+  res.setHeader("content-type", "application/json");
+  res.setHeader("access-control-allow-credentials", "true");
+
   if (req.url.startsWith("/images")) {
     const path = `.${req.url}`;
     if (existsSync(path)) {
@@ -95,17 +107,6 @@ export default async function handleServer(req, res) {
     res.end(JSON.stringify({ error: "Image doesn't exists" }));
     return;
   }
-  res.setHeader(
-    "access-control-allow-origin",
-    "https://e-commerce-gamma-one-65.vercel.app"
-  );
-  res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
-  res.setHeader(
-    "access-control-allow-headers",
-    "content-type, x-product-id, x-current-user"
-  );
-  res.setHeader("content-type", "application/json");
-  res.setHeader("access-control-allow-credentials", "true");
 
   switch (true) {
     case req.method === "OPTIONS":
