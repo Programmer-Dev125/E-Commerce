@@ -43,13 +43,16 @@ export async function handleForm(contacts, setReceived, setResponse) {
     }, 1000);
     return;
   }
-  const isFetch = await fetch("http://localhost:3000/contact", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(contacts),
-  });
+  const isFetch = await fetch(
+    "https://e-commerce-gamma-one-65.vercel.app/api/app/contact",
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(contacts),
+    }
+  );
   switch (isFetch.status) {
     case 200:
       {

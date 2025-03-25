@@ -1,20 +1,17 @@
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
-dotenv.config();
-
 export const token = jwt.sign(
-  JSON.parse(process.env.PAYLOAD_DATA),
-  process.env.SECRET_KEY,
+  JSON.parse(process.env.ADMIN_PAYLOAD),
+  process.env.ADMIN_KEY,
   { algorithm: "HS512", expiresIn: "3d" }
 );
 
 export function handleVerify(isToken) {
-  return jwt.verify(isToken, process.env.SECRET_KEY, { algorithms: "HS512" });
+  return jwt.verify(isToken, process.env.ADMIN_KEY, { algorithms: "HS512" });
 }
 
 export const clientToken = jwt.sign(
-  JSON.parse(process.env.CLIENT_PAYLOAD_DATA),
+  JSON.parse(process.env.CLIENT_PAYLOAD),
   process.env.CLIENT_KEY,
   { algorithm: "HS384", expiresIn: "3d" }
 );

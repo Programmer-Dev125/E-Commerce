@@ -1,4 +1,3 @@
-import { createServer } from "node:http";
 import mongoose, { Schema } from "mongoose";
 import { handleLogin } from "./login/login.js";
 import { handleAddProduct } from "./add-product/addProduct.js";
@@ -11,11 +10,9 @@ import { handleGetCart } from "./client/cart/get/handleGetCart.js";
 import { handleDeleteCart } from "./client/cart/delete/handleDeleteCart.js";
 import { handleContact } from "./client/contact/handleContact.js";
 
-const conn = await mongoose
-  .createConnection("mongodb://localhost:27017/users")
-  .asPromise();
+const conn = await mongoose.createConnection(URL).asPromise();
 if (!conn) {
-  throw new Error("Error connecting to database");
+  throw new Error("error creating connection");
 }
 
 const model = conn.model(
@@ -27,7 +24,7 @@ const model = conn.model(
       autoCreate: false,
     }
   ),
-  "user"
+  process.env.ADMIN
 );
 
 const productModel = conn.model(
@@ -45,7 +42,7 @@ const productModel = conn.model(
       autoCreate: false,
     }
   ),
-  "products"
+  process.env.PRODUCTS
 );
 
 const clientsModal = conn.model(
@@ -65,7 +62,7 @@ const clientsModal = conn.model(
       autoCreate: false,
     }
   ),
-  "clients"
+  process.env.USER
 );
 
 const contactModel = conn.model(
@@ -80,10 +77,10 @@ const contactModel = conn.model(
       autoCreate: false,
     }
   ),
-  "contact"
+  process.env.CONTACT
 );
 
-createServer(async (req, res) => {
+export default async function handleServer() {
   if (req.url.startsWith("/images")) {
     const path = `.${req.url}`;
     if (existsSync(path)) {
@@ -98,7 +95,10 @@ createServer(async (req, res) => {
     res.end(JSON.stringify({ error: "Image doesn't exists" }));
     return;
   }
-  res.setHeader("access-control-allow-origin", "http://localhost:5173");
+  res.setHeader(
+    "access-control-allow-origin",
+    "https://e-commerce-gamma-one-65.vercel.app"
+  );
   res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
   res.setHeader(
     "access-control-allow-headers",
@@ -144,4 +144,4 @@ createServer(async (req, res) => {
       res.end(JSON.stringify({ error: "Invalid Request Method or pathname" }));
       break;
   }
-}).listen(3000, "localhost");
+}

@@ -25,7 +25,7 @@ export default function Product({ onBuy, data }) {
           <div key={product.id} className="flex-box-col w100 mb60">
             <div className="relative card-img">
               <img
-                src={`http://localhost:3000${product.img}`}
+                src={`https://e-commerce-gamma-one-65.vercel.app/api/app${product.img}`}
                 alt="Product image"
               />
               <div

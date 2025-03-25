@@ -19,18 +19,21 @@ export default function Signup({ onUpdate }) {
     e.preventDefault();
     if (!signInfo.username || !signInfo.useremail || !signInfo.userpassword)
       return;
-    const isFetch = await fetch("http://localhost:3000/client-signup", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        name: signInfo.username,
-        email: signInfo.useremail,
-        password: signInfo.userpassword,
-      }),
-    });
+    const isFetch = await fetch(
+      "https://e-commerce-gamma-one-65.vercel.app/api/app/client-signup",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: signInfo.username,
+          email: signInfo.useremail,
+          password: signInfo.userpassword,
+        }),
+      }
+    );
     switch (isFetch.status) {
       case 200:
         {

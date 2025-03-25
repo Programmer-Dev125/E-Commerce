@@ -14,7 +14,10 @@ export default function ProductBuy({ user, price, img, onClose }) {
     <div className="buy-product-fix" onClick={handleClose}>
       <div className="buy-product-fix-content flex-box-row sp-between align-center relative">
         <div className="img-box w40">
-          <img src={`http://localhost:3000${img}`} alt="image" />
+          <img
+            src={`https://e-commerce-gamma-one-65.vercel.app/api/app${img}`}
+            alt="image"
+          />
         </div>
         <div className="w55">
           <div className="flex-box-row sp-between align-center">

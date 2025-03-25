@@ -18,7 +18,7 @@ export default function HeaderCarousel({ onBuy, data }) {
           carouselId === carousel.id && (
             <div key={carousel.id} className="flex-box-col g20 carousel-data">
               <img
-                src={`http://localhost:3000${carousel.img}`}
+                src={`https://e-commerce-gamma-one-65.vercel.app/api/app${carousel.img}`}
                 alt="Image text"
               />
               <div className="mb10">

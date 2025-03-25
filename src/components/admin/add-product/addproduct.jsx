@@ -6,11 +6,14 @@ export default function AddProduct() {
   async function handleProduct(e) {
     e.preventDefault();
     const fData = new FormData(formRef.current);
-    const isFetch = await fetch("http://localhost:3000/addProduct", {
-      method: "POST",
-      body: fData,
-      credentials: "include",
-    });
+    const isFetch = await fetch(
+      "https://e-commerce-gamma-one-65.vercel.app/api/app/addProduct",
+      {
+        method: "POST",
+        body: fData,
+        credentials: "include",
+      }
+    );
     if (isFetch.status === 200) {
       const isResp = await isFetch.json();
       console.log(isResp);

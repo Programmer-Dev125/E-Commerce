@@ -17,14 +17,17 @@ export default function Login({ onUpdate }) {
     e.stopPropagation();
     e.preventDefault();
     if (!info.email || !info.password) return;
-    const isFetch = await fetch("http://localhost:3000/client-login", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ email: info.email, password: info.password }),
-      credentials: "include",
-    });
+    const isFetch = await fetch(
+      "https://e-commerce-gamma-one-65.vercel.app/api/app/client-login",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ email: info.email, password: info.password }),
+        credentials: "include",
+      }
+    );
     switch (isFetch.status) {
       case 200:
         {

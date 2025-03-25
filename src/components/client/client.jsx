@@ -29,7 +29,9 @@ export default function Client() {
     window.addEventListener("popstate", handleHistory);
     window.addEventListener("pushState", handleHistory);
     (async () => {
-      const isFetch = await fetch("http://localhost:3000/products");
+      const isFetch = await fetch(
+        "https://e-commerce-gamma-one-65.vercel.app/api/app/products"
+      );
       const isResp = await isFetch.json();
       return setProducts(isResp);
     })();

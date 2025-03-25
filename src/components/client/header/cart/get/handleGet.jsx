@@ -1,11 +1,14 @@
 export async function handleGet(setCarts, user) {
-  const isFetch = await fetch("http://localhost:3000/get-cart", {
-    headers: {
-      "content-type": "application/json",
-      "x-current-user": JSON.stringify(user),
-    },
-    credentials: "include",
-  });
+  const isFetch = await fetch(
+    "https://e-commerce-gamma-one-65.vercel.app/api/app/get-cart",
+    {
+      headers: {
+        "content-type": "application/json",
+        "x-current-user": JSON.stringify(user),
+      },
+      credentials: "include",
+    }
+  );
   switch (isFetch.status) {
     case 200:
       {

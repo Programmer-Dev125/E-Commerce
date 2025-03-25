@@ -25,7 +25,7 @@ export default function CategoriesProduct({ data }) {
           <div key={cart.id} className="flex-box-col w100 mb60">
             <div className="relative cart-box">
               <img
-                src={`http://localhost:3000${cart.img}`}
+                src={`https://e-commerce-gamma-one-65.vercel.app/api/app${cart.img}`}
                 alt="img"
                 className="cart-img"
               />
