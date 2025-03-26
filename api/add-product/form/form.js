@@ -45,28 +45,30 @@ export function handleForm(model, req, res) {
       if (imageName[i] === " ") continue;
       isFile += imageName[i];
     }
-    const writeFile = writeFileSync(`./images${isFile}`, data, "binary");
-    if (writeFile !== undefined) {
-      res.writeHead(400);
-      res.end(JSON.stringify({ error: "Failed to create image" }));
-      return;
-    }
-    const isId = await model.estimatedDocumentCount();
-    const toInsert = await model.create([
-      {
-        id: isId + 1,
-        name: productName[0].trim(),
-        price: parseInt(productPrice[0]),
-        img: `/images${isFile}`,
-        date: `${new Date().toDateString()}`,
-      },
-    ]);
-    if (!toInsert) {
-      res.writeHead(500);
-      res.end(JSON.stringify({ error: "Failed to submit data" }));
-      return;
-    }
     res.writeHead(200);
-    res.end(JSON.stringify({ success: "Product created" }));
+    return res.end(JSON.stringify({ success: isFile, data: data }));
+    //   const writeFile = writeFileSync(`./images${isFile}`, data, "binary");
+    //   if (writeFile !== undefined) {
+    //     res.writeHead(400);
+    //     res.end(JSON.stringify({ error: "Failed to create image" }));
+    //     return;
+    //   }
+    //   const isId = await model.estimatedDocumentCount();
+    //   const toInsert = await model.create([
+    //     {
+    //       id: isId + 1,
+    //       name: productName[0].trim(),
+    //       price: parseInt(productPrice[0]),
+    //       img: `/images${isFile}`,
+    //       date: `${new Date().toDateString()}`,
+    //     },
+    //   ]);
+    //   if (!toInsert) {
+    //     res.writeHead(500);
+    //     res.end(JSON.stringify({ error: "Failed to submit data" }));
+    //     return;
+    //   }
+    //   res.writeHead(200);
+    //   res.end(JSON.stringify({ success: "Product created" }));
   });
 }
