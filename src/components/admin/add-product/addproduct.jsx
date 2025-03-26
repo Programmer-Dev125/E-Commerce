@@ -107,7 +107,6 @@ export default function AddProduct() {
             name="productFile"
             id="productFile"
             accept="image/*"
-            value={contents.productName}
             onChange={handleImageChange}
           />
         </>
