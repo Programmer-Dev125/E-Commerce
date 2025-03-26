@@ -91,7 +91,7 @@ export default function Header({
         </section>
       )}
       <img
-        src="/client-images/header-image.png"
+        src="/header-image.png"
         className="header-image"
         alt="Header Image"
       />
