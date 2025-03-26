@@ -30,10 +30,17 @@ export default function Client() {
     window.addEventListener("popstate", handleHistory);
 
     (async () => {
-      const isFetch = await fetch("http://localhost:3000");
+      const isFetch = await fetch(
+        "https://e-commerce-gamma-one-65.vercel.app/api/app",
+        {
+          headers: {
+            "content-type": "application/json",
+            "x-request-path": "/products",
+          },
+        }
+      );
       const isResp = await isFetch.json();
 
-      // Revoke old blob URLs before updating the state
       blobsRef.current.forEach((url) => URL.revokeObjectURL(url));
       blobsRef.current = [];
 
@@ -53,32 +60,6 @@ export default function Client() {
       blobsRef.current = [];
       window.removeEventListener("popstate", handleHistory);
     };
-    // function handleHistory() {
-    //   setCurrent(window.location.pathname);
-    // }
-    // window.addEventListener("popstate", handleHistory);
-    // window.addEventListener("pushState", handleHistory);
-
-    // let isResp = [];
-    // let blobs = [];
-
-    // (async () => {
-    //   const isFetch = await fetch("http://localhost:3000");
-    //   isResp = await isFetch.json();
-    //   isResp = isResp.map((item) => {
-    //     const blobUrl = URL.createObjectURL(
-    //       new Blob([new Uint8Array(item.img.data)], { type: "image/png" })
-    //     );
-    //     blobs.push(blobUrl);
-    //     return { ...item, img: blobUrl };
-    //   });
-
-    //   setProducts(isResp);
-    // })();
-
-    // return () => {
-    //   blobs.forEach((blobUrl) => URL.revokeObjectURL(blobUrl));
-    // };
   }, []);
 
   return (
@@ -113,8 +94,7 @@ export default function Client() {
             data={products}
             onLink={(val) => {
               window.history.pushState({}, "", val);
-              window.dispatchEvent(new Event("popstate"));
-              // setCurrent(val);
+              setCurrent(val);
             }}
           />
           <Categories data={products} />

@@ -17,7 +17,7 @@ export default function HeaderCarousel({ onBuy, data }) {
         return (
           carouselId === data.id && (
             <div key={data.id} className="flex-box-col g20 carousel-data">
-              <img src={data.blob} alt="Image text" />
+              <img src={data.img} alt="Image text" />
               <div className="mb10">
                 <p className="mt0 mb0 client-white-title">{data.name}</p>
                 <p className="mt10 mb0 client-price-text">{data.price}</p>
