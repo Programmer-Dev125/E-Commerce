@@ -9,7 +9,8 @@ export function handleForm(model, req, res) {
       res.end(JSON.stringify({ error: "Failed to parse form" }));
       return;
     }
-    console.log(fields, files);
+    res.writeHead(200);
+    return res.end(JSON.stringify({data: [fields, files]}));
   //   const { productName, productPrice } = fields;
   //   const { productFile } = files;
   //   if (!productName[0] || !productPrice[0] || !productFile[0]) {
