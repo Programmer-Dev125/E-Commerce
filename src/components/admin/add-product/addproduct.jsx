@@ -12,7 +12,9 @@ export default function AddProduct() {
         method: "POST",
         body: fData,
         credentials: "include",
-        "x-request-path": "/addProduct",
+        headers: {
+          "x-request-path": "/addProduct",
+        },
       }
     );
     if (isFetch.status === 200) {
