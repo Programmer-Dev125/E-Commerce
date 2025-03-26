@@ -124,19 +124,19 @@ export default async function handleServer(req, res) {
       handleAddProduct(productModel, req, res);
       break;
     case req.method === "POST" && reqPath === "/client-login":
-      handleClientLogin(clientsModal, req, res);
+      handleClientLogin(clientsModel, req, res);
       break;
     case req.method === "POST" && reqPath === "/client-signup":
-      handleClientSign(clientsModal, req, res);
+      handleClientSign(clientsModel, req, res);
       break;
     case req.method === "GET" && reqPath === "/client-cart":
-      handleCart(clientsModal, productModel, req, res);
+      handleCart(clientsModel, productModel, req, res);
       break;
     case req.method === "GET" && reqPath === "/get-cart":
-      handleGetCart(clientsModal, productModel, req, res);
+      handleGetCart(clientsModel, productModel, req, res);
       break;
     case req.method === "DELETE" && reqPath === "/del-cart":
-      handleDeleteCart(clientsModal, req, res);
+      handleDeleteCart(clientsModel, req, res);
       break;
     case req.method === "POST" && reqPath === "/contact":
       handleContact(contactModel, req, res);
