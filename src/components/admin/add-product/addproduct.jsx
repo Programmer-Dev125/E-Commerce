@@ -62,7 +62,7 @@ export default function AddProduct() {
   return (
     <div className="addProduct-card">
       <h2 className="mt10 mb40 page-title wfit">Add Product</h2>
-      <form autoComplete="off" onSubmit={handleProduct}>
+      <form ref={formRef} autoComplete="off" onSubmit={handleProduct}>
         <>
           <label
             htmlFor="productName"
