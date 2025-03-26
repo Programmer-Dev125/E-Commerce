@@ -24,7 +24,13 @@ export function handleAddProduct(model, req, res) {
   req.on("end", () => {
     const isObj = JSON.parse(body);
     res.writeHead(200);
-    return res.end(JSON.stringify({ data: isObj }));
+    return res.end(
+      JSON.stringify({
+        name: isObj.productName,
+        price: isObj.productPrice,
+        img: isObj.productFile.arrayBuffer(),
+      })
+    );
   });
   // handleForm(model, req, res);
 }

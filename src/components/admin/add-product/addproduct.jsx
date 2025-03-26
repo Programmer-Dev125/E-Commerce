@@ -4,7 +4,7 @@ export default function AddProduct() {
   const formRef = useRef(null);
   const [contents, setContents] = useState({
     productName: "",
-    productFile: "",
+    productPrice: "",
     productFile: "",
   });
 
@@ -28,13 +28,36 @@ export default function AddProduct() {
   //   }
   // }
 
-  function handleProduct(e) {
+  async function handleProduct(e) {
     e.preventDefault();
+    const isFetch = await fetch(
+      "https://e-commerce-gamma-one-65.vercel.app/api/app",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(contents),
+      }
+    );
+    const isResp = await isFetch.json();
+    console.log(isResp);
+  }
+
+  function handleChange(e) {
+    setContents({
+      ...contents,
+      [e.target.id]: e.target.value,
+    });
   }
 
   function handleImageChange(e) {
     const isImg = formRef.current.querySelector("img");
     const isFile = e.target.files[0];
+    setContents({
+      ...contents,
+      productFile: URL.createObjectURL(isFile),
+    });
     isImg.src = URL.createObjectURL(isFile);
   }
 
@@ -54,7 +77,14 @@ export default function AddProduct() {
           >
             Product Name
           </label>
-          <input type="text" name="productName" id="productName" required />
+          <input
+            type="text"
+            name="productName"
+            id="productName"
+            value={contents.productName}
+            onChange={handleChange}
+            required
+          />
         </>
         <>
           <label
@@ -63,7 +93,14 @@ export default function AddProduct() {
           >
             Product Price
           </label>
-          <input type="text" name="productPrice" id="productPrice" required />
+          <input
+            type="text"
+            name="productPrice"
+            id="productPrice"
+            value={contents.productPrice}
+            onChange={handleChange}
+            required
+          />
         </>
         <>
           <label
@@ -77,6 +114,7 @@ export default function AddProduct() {
             name="productFile"
             id="productFile"
             accept="image/*"
+            value={contents.productName}
             onChange={handleImageChange}
           />
         </>
