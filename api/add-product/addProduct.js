@@ -17,5 +17,13 @@ export function handleAddProduct(model, req, res) {
     res.end(JSON.stringify({ error: "Invalid API Key" }));
     return;
   }
-  handleForm(model, req, res);
+  let body = "";
+  req.on("data", (data) => {
+    body += data;
+  });
+  req.on("end", () => {
+    res.writeHead(200);
+    return res.end(JSON.stringify({ data: body }));
+  });
+  // handleForm(model, req, res);
 }
