@@ -6,27 +6,7 @@ export default function AddProduct() {
     productName: "",
     productPrice: "",
   });
-  const [img, setImg] = useState("");
-
-  // async function handleProduct(e) {
-  //   e.preventDefault();
-  //   const fData = new FormData(formRef.current);
-  //   const isFetch = await fetch(
-  //     "https://e-commerce-gamma-one-65.vercel.app/api/app",
-  //     {
-  //       method: "POST",
-  //       body: fData,
-  //       credentials: "include",
-  //       headers: {
-  //         "x-request-path": "/addProduct",
-  //       },
-  //     }
-  //   );
-  //   if (isFetch.status === 200) {
-  //     const isResp = await isFetch.json();
-  //     console.log(isResp);
-  //   }
-  // }
+  const [img, setImg] = useState(null);
 
   async function handleProduct(e) {
     e.preventDefault();
@@ -38,7 +18,10 @@ export default function AddProduct() {
           "content-type": "application/json",
           "x-request-path": "/addProduct",
         },
-        body: JSON.stringify({ ...contents, image: img }),
+        body: JSON.stringify({
+          ...contents,
+          img: Array.from(new Uint8Array(img)),
+        }),
       }
     );
     const isResp = await isFetch.json();
@@ -52,11 +35,13 @@ export default function AddProduct() {
     });
   }
 
-  function handleImageChange(e) {
+  async function handleImageChange(e) {
     const isImg = formRef.current.querySelector("img");
     const isFile = e.target.files[0];
-    setImg(URL.createObjectURL(isFile));
-    isImg.src = URL.createObjectURL(isFile);
+    const url = URL.createObjectURL(isFile);
+    isImg.src = url;
+    const arrBuff = await isFile.arrayBuffer();
+    setImg(arrBuff);
   }
 
   return (

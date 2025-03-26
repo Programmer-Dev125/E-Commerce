@@ -13,31 +13,27 @@ export default function HeaderCarousel({ onBuy, data }) {
   }
   return (
     <div className="w35 header-carousel-div">
-      {isData.map(
-        (carousel) =>
-          carouselId === carousel.id && (
-            <div key={carousel.id} className="flex-box-col g20 carousel-data">
-              <img
-                src={`https://e-commerce-gamma-one-65.vercel.app/api/app${carousel.img}`}
-                alt="Image text"
-              />
+      {isData.map((data) => {
+        return (
+          carouselId === data.id && (
+            <div key={data.id} className="flex-box-col g20 carousel-data">
+              <img src={data.blob} alt="Image text" />
               <div className="mb10">
-                <p className="mt0 mb0 client-white-title">{carousel.name}</p>
-                <p className="mt10 mb0 client-price-text">{carousel.price}</p>
+                <p className="mt0 mb0 client-white-title">{data.name}</p>
+                <p className="mt10 mb0 client-price-text">{data.price}</p>
               </div>
               <div className="w50">
                 <button
                   className="header-buy-btn"
-                  onClick={() =>
-                    onBuy(true, carousel.name, carousel.price, carousel.img)
-                  }
+                  onClick={() => onBuy(true, data.name, data.price, data.img)}
                 >
                   Buy
                 </button>
               </div>
             </div>
           )
-      )}
+        );
+      })}
       <div
         className="flex-box-row sp-between w20 mt50"
         onClick={handleCarousel}

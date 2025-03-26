@@ -31,11 +31,10 @@ const productModel = conn.model(
   "productModel",
   new Schema(
     {
-      id: Number,
-      name: String,
-      price: Number,
-      img: String,
-      date: String,
+      id: { type: Number, required: true, unique: true },
+      name: { type: String, required: true, unique: true },
+      price: { type: Number },
+      img: { type: Buffer, required: true },
     },
     {
       autoIndex: false,

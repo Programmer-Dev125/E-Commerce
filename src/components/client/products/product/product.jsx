@@ -24,10 +24,7 @@ export default function Product({ onBuy, data }) {
         {data.map((product) => (
           <div key={product.id} className="flex-box-col w100 mb60">
             <div className="relative card-img">
-              <img
-                src={`https://e-commerce-gamma-one-65.vercel.app/api/app${product.img}`}
-                alt="Product image"
-              />
+              <img src={product.img} alt="Product image" />
               <div
                 className="cart-icon"
                 onClick={() => handleCart(product.id, setReceived, setResponse)}

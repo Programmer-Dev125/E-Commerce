@@ -54,7 +54,7 @@ export default function Cart({ onCartModal, onBuyModal }) {
                 <div className="w95 mauto flex-box-row sp-between align-center bottom pb20">
                   <div className="flex-box-row align-center w80">
                     <img
-                      src={`https://e-commerce-gamma-one-65.vercel.app/api/app${cart.img}`}
+                      src={cart.img}
                       alt="cart image"
                       className="isImg mr15"
                     />

@@ -39,7 +39,7 @@ export default function SearchCard({ onClose, data }) {
               <div className="flex-box-row align-center">
                 <div>
                   <img
-                    src={`https://e-commerce-gamma-one-65.vercel.app/api/app${search.img}`}
+                    src={search.img}
                     alt="Search Image"
                     className="sq-img mr20"
                   />

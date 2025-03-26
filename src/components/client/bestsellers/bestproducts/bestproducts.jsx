@@ -16,10 +16,7 @@ export default function BestProducts({ onBuy, data }) {
     <div className="product-section-row" ref={isRef}>
       {data.map((product) => (
         <div key={product.id} className="mr5 ml10">
-          <img
-            src={`http://localhost:3000${product.img}`}
-            alt="product image"
-          />
+          <img src={product.img} alt="product image" />
           <div className="flex-box-row sp-between mt20">
             <p className="client-title" title={product.name}>
               {product.name}

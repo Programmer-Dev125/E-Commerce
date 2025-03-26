@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import AboutReview from "./aboutreview/aboutreview.jsx";
 import BestSeller from "./bestsellers/bestseller.jsx";
 import Categories from "./categories/categories.jsx";
@@ -21,26 +21,64 @@ export default function Client() {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productImg, setProductImg] = useState("");
+  const blobsRef = useRef([]);
 
   useEffect(() => {
     function handleHistory() {
       setCurrent(window.location.pathname);
     }
     window.addEventListener("popstate", handleHistory);
-    window.addEventListener("pushState", handleHistory);
+
     (async () => {
-      const isFetch = await fetch(
-        "https://e-commerce-gamma-one-65.vercel.app/api/app",
-        {
-          headers: {
-            "x-request-path": "/products",
-            "content-type": "application/json",
-          },
-        }
-      );
+      const isFetch = await fetch("http://localhost:3000");
       const isResp = await isFetch.json();
-      return setProducts(isResp);
+
+      // Revoke old blob URLs before updating the state
+      blobsRef.current.forEach((url) => URL.revokeObjectURL(url));
+      blobsRef.current = [];
+
+      const updatedProducts = isResp.map((item) => {
+        const blobUrl = URL.createObjectURL(
+          new Blob([new Uint8Array(item.img.data)], { type: "image/png" })
+        );
+        blobsRef.current.push(blobUrl);
+        return { ...item, img: blobUrl };
+      });
+
+      setProducts(updatedProducts);
     })();
+
+    return () => {
+      blobsRef.current.forEach((url) => URL.revokeObjectURL(url));
+      blobsRef.current = [];
+      window.removeEventListener("popstate", handleHistory);
+    };
+    // function handleHistory() {
+    //   setCurrent(window.location.pathname);
+    // }
+    // window.addEventListener("popstate", handleHistory);
+    // window.addEventListener("pushState", handleHistory);
+
+    // let isResp = [];
+    // let blobs = [];
+
+    // (async () => {
+    //   const isFetch = await fetch("http://localhost:3000");
+    //   isResp = await isFetch.json();
+    //   isResp = isResp.map((item) => {
+    //     const blobUrl = URL.createObjectURL(
+    //       new Blob([new Uint8Array(item.img.data)], { type: "image/png" })
+    //     );
+    //     blobs.push(blobUrl);
+    //     return { ...item, img: blobUrl };
+    //   });
+
+    //   setProducts(isResp);
+    // })();
+
+    // return () => {
+    //   blobs.forEach((blobUrl) => URL.revokeObjectURL(blobUrl));
+    // };
   }, []);
 
   return (
@@ -49,7 +87,7 @@ export default function Client() {
         isCurr={current}
         onRoute={(val) => {
           window.history.pushState({}, "", val);
-          window.dispatchEvent(new Event("pushState")); // Notify React about route change
+          window.dispatchEvent(new Event("popstate")); // Notify React about route change
           setCurrent(val);
         }}
         onUserModal={(val) => setUserModal(val)}
@@ -75,7 +113,8 @@ export default function Client() {
             data={products}
             onLink={(val) => {
               window.history.pushState({}, "", val);
-              setCurrent(val);
+              window.dispatchEvent(new Event("popstate"));
+              // setCurrent(val);
             }}
           />
           <Categories data={products} />
