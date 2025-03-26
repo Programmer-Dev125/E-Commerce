@@ -18,11 +18,12 @@ export default function Login({ onUpdate }) {
     e.preventDefault();
     if (!info.email || !info.password) return;
     const isFetch = await fetch(
-      "https://e-commerce-gamma-one-65.vercel.app/api/app/client-login",
+      "https://e-commerce-gamma-one-65.vercel.app/api/app",
       {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          "x-request-path": "/client-login",
         },
         body: JSON.stringify({ email: info.email, password: info.password }),
         credentials: "include",

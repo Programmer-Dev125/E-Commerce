@@ -15,13 +15,14 @@ export async function handleDelete(
     isGet.addEventListener("success", async (ev) => {
       const user = ev.target.result;
       const isFetch = await fetch(
-        "https://e-commerce-gamma-one-65.vercel.app/api/app/del-cart",
+        "https://e-commerce-gamma-one-65.vercel.app/api/app",
         {
           method: "DELETE",
           headers: {
             "content-type": "application/json",
             "x-product-id": name,
             "x-current-user": JSON.stringify(user),
+            "x-request-path": "/del-cart",
           },
           credentials: "include",
         }

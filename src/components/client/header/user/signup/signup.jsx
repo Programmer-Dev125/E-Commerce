@@ -20,11 +20,12 @@ export default function Signup({ onUpdate }) {
     if (!signInfo.username || !signInfo.useremail || !signInfo.userpassword)
       return;
     const isFetch = await fetch(
-      "https://e-commerce-gamma-one-65.vercel.app/api/app/client-signup",
+      "https://e-commerce-gamma-one-65.vercel.app/api/app",
       {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          "x-request-path": "/client-signup",
         },
         credentials: "include",
         body: JSON.stringify({

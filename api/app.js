@@ -10,7 +10,7 @@ import { handleGetCart } from "./client/cart/get/handleGetCart.js";
 import { handleDeleteCart } from "./client/cart/delete/handleDeleteCart.js";
 import { handleContact } from "./client/contact/handleContact.js";
 
-const conn = await mongoose.createConnection(URL).asPromise();
+const conn = await mongoose.createConnection(process.env.MONGO_URL).asPromise();
 if (!conn) {
   throw new Error("error creating connection");
 }
@@ -88,7 +88,7 @@ export default async function handleServer(req, res) {
   res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
   res.setHeader(
     "access-control-allow-headers",
-    "content-type, x-product-id, x-current-user"
+    "content-type, x-product-id, x-current-user, x-request-path"
   );
   res.setHeader("content-type", "application/json");
   res.setHeader("access-control-allow-credentials", "true");
@@ -104,8 +104,13 @@ export default async function handleServer(req, res) {
       return;
     }
     res.writeHead(400);
-    res.end(JSON.stringify({ error: "Image doesn't exists" }));
-    return;
+    return res.end(JSON.stringify({ error: "Image doesn't exists" }));
+  }
+
+  const reqPath = req.headers["x-request-path"];
+  if (!reqPath) {
+    res.writeHead(400);
+    return res.end(JSON.stringify({ error: "Request path not included" }));
   }
 
   switch (true) {
@@ -113,31 +118,31 @@ export default async function handleServer(req, res) {
       res.writeHead(200);
       res.end();
       break;
-    case req.method === "GET" && req.url === "/products":
+    case req.method === "GET" && reqPath === "/products":
       handleFetch(productModel, res);
       break;
-    case req.method === "POST" && req.url === "/api/login/login":
+    case req.method === "POST" && reqPath === "/login":
       handleLogin(model, req, res);
       break;
-    case req.method === "POST" && req.url === "/addProduct":
+    case req.method === "POST" && reqPath === "/addProduct":
       handleAddProduct(productModel, req, res);
       break;
-    case req.method === "POST" && req.url === "/client-login":
+    case req.method === "POST" && reqPath === "/client-login":
       handleClientLogin(clientsModal, req, res);
       break;
-    case req.method === "POST" && req.url === "/client-signup":
+    case req.method === "POST" && reqPath === "/client-signup":
       handleClientSign(clientsModal, req, res);
       break;
-    case req.method === "GET" && req.url === "/client-cart":
+    case req.method === "GET" && reqPath === "/client-cart":
       handleCart(clientsModal, productModel, req, res);
       break;
-    case req.method === "GET" && req.url === "/get-cart":
+    case req.method === "GET" && reqPath === "/get-cart":
       handleGetCart(clientsModal, productModel, req, res);
       break;
-    case req.method === "DELETE" && req.url === "/del-cart":
+    case req.method === "DELETE" && reqPath === "/del-cart":
       handleDeleteCart(clientsModal, req, res);
       break;
-    case req.method === "POST" && req.url === "/contact":
+    case req.method === "POST" && reqPath === "/contact":
       handleContact(contactModel, req, res);
       break;
     default:

@@ -1,10 +1,11 @@
 export async function handleGet(setCarts, user) {
   const isFetch = await fetch(
-    "https://e-commerce-gamma-one-65.vercel.app/api/app/get-cart",
+    "https://e-commerce-gamma-one-65.vercel.app/api/app",
     {
       headers: {
         "content-type": "application/json",
         "x-current-user": JSON.stringify(user),
+        "x-request-path": "/get-cart",
       },
       credentials: "include",
     }

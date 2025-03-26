@@ -9,12 +9,13 @@ export async function handleCart(id, setReceived, setResponse) {
     isResult.addEventListener("success", async (ev) => {
       const user = ev.target.result;
       const isFetch = await fetch(
-        "https://e-commerce-gamma-one-65.vercel.app/api/app/client-cart",
+        "https://e-commerce-gamma-one-65.vercel.app/api/app",
         {
           headers: {
             "content-type": "application/json",
             "x-product-id": id,
             "x-current-user": JSON.stringify(user),
+            "x-request-path": "client-cart",
           },
           credentials: "include",
         }

@@ -44,11 +44,12 @@ export async function handleForm(contacts, setReceived, setResponse) {
     return;
   }
   const isFetch = await fetch(
-    "https://e-commerce-gamma-one-65.vercel.app/api/app/contact",
+    "https://e-commerce-gamma-one-65.vercel.app/api/app",
     {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        "x-request-path": "/contact",
       },
       body: JSON.stringify(contacts),
     }
