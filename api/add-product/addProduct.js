@@ -1,5 +1,5 @@
 import { handleVerify } from "../jwt.js";
-import { handleForm } from "./form/form.js";
+// import { handleForm } from "./form/form.js";
 
 export function handleAddProduct(model, req, res) {
   const cookie = req.headers.cookie;
