@@ -5,8 +5,8 @@ export default function AddProduct() {
   const [contents, setContents] = useState({
     productName: "",
     productPrice: "",
-    productFile: "",
   });
+  const [img, setImg] = useState("");
 
   // async function handleProduct(e) {
   //   e.preventDefault();
@@ -36,8 +36,9 @@ export default function AddProduct() {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          "x-request-path": "/addProduct",
         },
-        body: JSON.stringify(contents),
+        body: JSON.stringify({ ...contents, image: img }),
       }
     );
     const isResp = await isFetch.json();
@@ -54,22 +55,14 @@ export default function AddProduct() {
   function handleImageChange(e) {
     const isImg = formRef.current.querySelector("img");
     const isFile = e.target.files[0];
-    setContents({
-      ...contents,
-      productFile: URL.createObjectURL(isFile),
-    });
+    setImg(URL.createObjectURL(isFile));
     isImg.src = URL.createObjectURL(isFile);
   }
 
   return (
     <div className="addProduct-card">
       <h2 className="mt10 mb40 page-title wfit">Add Product</h2>
-      <form
-        ref={formRef}
-        autoComplete="off"
-        encType="multipart/form-data"
-        onSubmit={handleProduct}
-      >
+      <form autoComplete="off" onSubmit={handleProduct}>
         <>
           <label
             htmlFor="productName"
