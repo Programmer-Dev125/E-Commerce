@@ -10,140 +10,157 @@ import { handleGetCart } from "./client/cart/get/handleGetCart.js";
 import { handleDeleteCart } from "./client/cart/delete/handleDeleteCart.js";
 import { handleContact } from "./client/contact/handleContact.js";
 
-let conn = null;
+let conn;
 let model, productModel, clientsModel, contactModel;
 
+// ✅ Create a function to initialize the database connection
 async function connectDB() {
-  if (conn) return conn; // Reuse existing connection
+  if (conn) return conn; // If already connected, return the existing connection
 
-  conn = await mongoose.createConnection(process.env.MONGO_URL).asPromise();
-  console.log("MongoDB Connected");
+  try {
+    conn = await mongoose.connect(process.env.MONGO_URL);
+    console.log("✅ MongoDB Connected");
 
-  model = conn.model(
-    "isModal",
-    new Schema(
-      { id: Number, name: String, password: String },
-      { autoIndex: false, autoCreate: false }
-    ),
-    process.env.USER
-  );
+    // Define models AFTER connection is established
+    model = conn.model(
+      "isModal",
+      new Schema(
+        { id: Number, name: String, password: String },
+        { autoIndex: false, autoCreate: false }
+      ),
+      process.env.USER
+    );
 
-  productModel = conn.model(
-    "productModel",
-    new Schema(
-      {
-        id: { type: Number, required: true, unique: true },
-        name: { type: String, required: true, unique: true },
-        price: { type: Number },
-        img: { type: Buffer, required: true },
-      },
-      { autoIndex: false, autoCreate: false }
-    ),
-    process.env.PRODUCTS
-  );
+    productModel = conn.model(
+      "productModel",
+      new Schema(
+        {
+          id: { type: Number, required: true, unique: true },
+          name: { type: String, required: true, unique: true },
+          price: { type: Number },
+          img: { type: Buffer, required: true },
+        },
+        { autoIndex: false, autoCreate: false }
+      ),
+      process.env.PRODUCTS
+    );
 
-  clientsModel = conn.model(
-    "clientModal",
-    new Schema(
-      {
-        id: { type: Number, required: true, unique: true },
-        name: { type: String, required: true, unique: true },
-        email: { type: String, required: true, unique: true },
-        password: { type: String, required: true },
-        date: { type: String, required: true },
-        cart: { type: Array },
-        bought: { type: Array },
-      },
-      { autoIndex: false, autoCreate: false }
-    ),
-    process.env.USER
-  );
+    clientsModel = conn.model(
+      "clientModal",
+      new Schema(
+        {
+          id: { type: Number, required: true, unique: true },
+          name: { type: String, required: true, unique: true },
+          email: { type: String, required: true, unique: true },
+          password: { type: String, required: true },
+          date: { type: String, required: true },
+          cart: { type: Array },
+          bought: { type: Array },
+        },
+        { autoIndex: false, autoCreate: false }
+      ),
+      process.env.USER
+    );
 
-  contactModel = conn.model(
-    "contactModel",
-    new Schema(
-      {
-        id: { type: Number, required: true, unique: true },
-        email: { type: String, required: true, unique: true },
-      },
-      { autoIndex: false, autoCreate: false }
-    ),
-    process.env.CONTACT
-  );
+    contactModel = conn.model(
+      "contactModel",
+      new Schema(
+        {
+          id: { type: Number, required: true, unique: true },
+          email: { type: String, required: true, unique: true },
+        },
+        { autoIndex: false, autoCreate: false }
+      ),
+      process.env.CONTACT
+    );
 
-  return conn;
+    return conn;
+  } catch (error) {
+    console.error("❌ MongoDB Connection Error:", error);
+    throw new Error("Failed to connect to MongoDB");
+  }
 }
 
+// ✅ Ensure database is ready before handling requests
 export default async function handleServer(req, res) {
-  await connectDB();
+  try {
+    await connectDB(); // Ensure MongoDB is connected
 
-  res.setHeader(
-    "access-control-allow-origin",
-    "https://e-commerce-gamma-one-65.vercel.app"
-  );
-  res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
-  res.setHeader(
-    "access-control-allow-headers",
-    "content-type, x-product-id, x-current-user, x-request-path"
-  );
-  res.setHeader("content-type", "application/json");
-  res.setHeader("access-control-allow-credentials", "true");
+    res.setHeader(
+      "access-control-allow-origin",
+      "https://e-commerce-gamma-one-65.vercel.app"
+    );
+    res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
+    res.setHeader(
+      "access-control-allow-headers",
+      "content-type, x-product-id, x-current-user, x-request-path"
+    );
+    res.setHeader("content-type", "application/json");
+    res.setHeader("access-control-allow-credentials", "true");
 
-  if (req.url.startsWith("/images")) {
-    const path = `.${req.url}`;
-    if (existsSync(path)) {
-      res.writeHead(200, { "content-type": "image/png" });
-      const read = createReadStream(path).pipe(res);
-      read.on("end", () => {
-        res.end();
-      });
-      return;
+    // ✅ Handle image serving properly
+    if (req.url.startsWith("/images")) {
+      const path = `.${req.url}`;
+      if (existsSync(path)) {
+        res.writeHead(200, { "content-type": "image/png" });
+        const read = createReadStream(path).pipe(res);
+        read.on("end", () => res.end());
+        return;
+      }
+      res.writeHead(400);
+      return res.end(JSON.stringify({ error: "Image doesn't exist" }));
     }
-    res.writeHead(400);
-    return res.end(JSON.stringify({ error: "Image doesn't exists" }));
-  }
 
-  const reqPath = req.headers["x-request-path"];
-  if (!reqPath) {
-    res.writeHead(400);
-    return res.end(JSON.stringify({ error: "Request path not included" }));
-  }
+    // ✅ Ensure request path is provided
+    const reqPath = req.headers["x-request-path"];
+    if (!reqPath) {
+      res.writeHead(400);
+      return res.end(JSON.stringify({ error: "Request path not included" }));
+    }
 
-  switch (true) {
-    case req.method === "OPTIONS":
-      res.writeHead(200);
-      res.end();
-      break;
-    case req.method === "GET" && reqPath === "/products":
-      handleFetch(productModel, res);
-      break;
-    case req.method === "POST" && reqPath === "/login":
-      handleLogin(model, req, res);
-      break;
-    case req.method === "POST" && reqPath === "/addProduct":
-      handleAddProduct(productModel, req, res);
-      break;
-    case req.method === "POST" && reqPath === "/client-login":
-      handleClientLogin(clientsModel, req, res);
-      break;
-    case req.method === "POST" && reqPath === "/client-signup":
-      handleClientSign(clientsModel, req, res);
-      break;
-    case req.method === "GET" && reqPath === "/client-cart":
-      handleCart(clientsModel, productModel, req, res);
-      break;
-    case req.method === "GET" && reqPath === "/get-cart":
-      handleGetCart(clientsModel, productModel, req, res);
-      break;
-    case req.method === "DELETE" && reqPath === "/del-cart":
-      handleDeleteCart(clientsModel, req, res);
-      break;
-    case req.method === "POST" && reqPath === "/contact":
-      handleContact(contactModel, req, res);
-      break;
-    default:
-      res.writeHead(405);
-      res.end(JSON.stringify({ error: "Invalid Request Method or pathname" }));
-      break;
+    // ✅ Route handling with switch-case
+    switch (true) {
+      case req.method === "OPTIONS":
+        res.writeHead(200);
+        res.end();
+        break;
+      case req.method === "GET" && reqPath === "/products":
+        handleFetch(productModel, res);
+        break;
+      case req.method === "POST" && reqPath === "/login":
+        handleLogin(model, req, res);
+        break;
+      case req.method === "POST" && reqPath === "/addProduct":
+        handleAddProduct(productModel, req, res);
+        break;
+      case req.method === "POST" && reqPath === "/client-login":
+        handleClientLogin(clientsModel, req, res);
+        break;
+      case req.method === "POST" && reqPath === "/client-signup":
+        handleClientSign(clientsModel, req, res);
+        break;
+      case req.method === "GET" && reqPath === "/client-cart":
+        handleCart(clientsModel, productModel, req, res);
+        break;
+      case req.method === "GET" && reqPath === "/get-cart":
+        handleGetCart(clientsModel, productModel, req, res);
+        break;
+      case req.method === "DELETE" && reqPath === "/del-cart":
+        handleDeleteCart(clientsModel, req, res);
+        break;
+      case req.method === "POST" && reqPath === "/contact":
+        handleContact(contactModel, req, res);
+        break;
+      default:
+        res.writeHead(405);
+        res.end(
+          JSON.stringify({ error: "Invalid Request Method or pathname" })
+        );
+        break;
+    }
+  } catch (error) {
+    console.error("❌ Server Error:", error);
+    res.writeHead(500);
+    res.end(JSON.stringify({ error: "Internal Server Error" }));
   }
 }
