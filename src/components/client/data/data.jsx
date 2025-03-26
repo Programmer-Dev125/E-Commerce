@@ -74,7 +74,7 @@ export const testimonial = [
   {
     id: 1,
     name: "John Doe",
-    img: "/assets/client-images/user-img.png",
+    img: "/user-img.png",
     title: "CEO of Flux",
     time: "June 20, 2025",
     review: "5",
@@ -84,7 +84,7 @@ export const testimonial = [
   {
     id: 2,
     name: "Jane Doe",
-    img: "/assets/client-images/user-img.png",
+    img: "/user-img.png",
     title: "HR of Facebook",
     time: "July 22, 2025",
     review: "5",
@@ -94,7 +94,7 @@ export const testimonial = [
   {
     id: 3,
     name: "Josh Doe",
-    img: "/assets/client-images/user-img.png",
+    img: "/user-img.png",
     title: "HR of React",
     time: "August 30, 2025",
     review: "5",
