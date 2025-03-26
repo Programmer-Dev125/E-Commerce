@@ -1,5 +1,5 @@
 import { handleVerify } from "../jwt.js";
-// import { handleForm } from "./form/form.js";
+import { handleForm } from "./form/form.js";
 
 export function handleAddProduct(model, req, res) {
   const cookie = req.headers.cookie;
@@ -22,8 +22,9 @@ export function handleAddProduct(model, req, res) {
     body += data;
   });
   req.on("end", () => {
+    const isObj = JSON.parse(body);
     res.writeHead(200);
-    return res.end(JSON.stringify({ data: body }));
+    return res.end(JSON.stringify({ data: isObj }));
   });
   // handleForm(model, req, res);
 }

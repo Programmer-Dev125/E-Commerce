@@ -1,26 +1,35 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function AddProduct() {
   const formRef = useRef(null);
+  const [contents, setContents] = useState({
+    productName: "",
+    productFile: "",
+    productFile: "",
+  });
 
-  async function handleProduct(e) {
+  // async function handleProduct(e) {
+  //   e.preventDefault();
+  //   const fData = new FormData(formRef.current);
+  //   const isFetch = await fetch(
+  //     "https://e-commerce-gamma-one-65.vercel.app/api/app",
+  //     {
+  //       method: "POST",
+  //       body: fData,
+  //       credentials: "include",
+  //       headers: {
+  //         "x-request-path": "/addProduct",
+  //       },
+  //     }
+  //   );
+  //   if (isFetch.status === 200) {
+  //     const isResp = await isFetch.json();
+  //     console.log(isResp);
+  //   }
+  // }
+
+  function handleProduct(e) {
     e.preventDefault();
-    const fData = new FormData(formRef.current);
-    const isFetch = await fetch(
-      "https://e-commerce-gamma-one-65.vercel.app/api/app",
-      {
-        method: "POST",
-        body: fData,
-        credentials: "include",
-        headers: {
-          "x-request-path": "/addProduct",
-        },
-      }
-    );
-    if (isFetch.status === 200) {
-      const isResp = await isFetch.json();
-      console.log(isResp);
-    }
   }
 
   function handleImageChange(e) {
@@ -45,7 +54,7 @@ export default function AddProduct() {
           >
             Product Name
           </label>
-          <input type="text" name="productName" id="productName" />
+          <input type="text" name="productName" id="productName" required />
         </>
         <>
           <label
@@ -54,7 +63,7 @@ export default function AddProduct() {
           >
             Product Price
           </label>
-          <input type="text" name="productPrice" id="productPrice" />
+          <input type="text" name="productPrice" id="productPrice" required />
         </>
         <>
           <label

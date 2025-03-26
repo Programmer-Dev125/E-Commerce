@@ -24,7 +24,7 @@ const model = conn.model(
       autoCreate: false,
     }
   ),
-  process.env.ADMIN
+  process.env.USER
 );
 
 const productModel = conn.model(
@@ -90,7 +90,7 @@ export default async function handleServer(req, res) {
     "access-control-allow-headers",
     "content-type, x-product-id, x-current-user, x-request-path"
   );
-  // res.setHeader("content-type", "application/json");
+  res.setHeader("content-type", "application/json");
   res.setHeader("access-control-allow-credentials", "true");
 
   if (req.url.startsWith("/images")) {
