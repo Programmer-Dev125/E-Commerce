@@ -7,11 +7,12 @@ export default function AddProduct() {
     e.preventDefault();
     const fData = new FormData(formRef.current);
     const isFetch = await fetch(
-      "https://e-commerce-gamma-one-65.vercel.app/api/app/addProduct",
+      "https://e-commerce-gamma-one-65.vercel.app/api/app",
       {
         method: "POST",
         body: fData,
         credentials: "include",
+        "x-request-path": "/addProduct",
       }
     );
     if (isFetch.status === 200) {

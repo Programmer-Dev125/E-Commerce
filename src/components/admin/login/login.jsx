@@ -17,11 +17,12 @@ export default function Login({ onLogin }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const isFetch = await fetch(
-      "https://e-commerce-gamma-one-65.vercel.app/api/login/login",
+      "https://e-commerce-gamma-one-65.vercel.app/api/app",
       {
         method: "POST",
         headers: {
           "content-type": "application/json",
+          "x-request-path": "/login",
         },
         body: JSON.stringify({ name: fields.name, password: fields.password }),
         credentials: "include",
