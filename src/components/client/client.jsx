@@ -35,7 +35,7 @@ export default function Client() {
         {
           headers: {
             "content-type": "application/json",
-            "x-request-path": "/products",
+            // "x-request-path": "/products",
           },
         }
       );
