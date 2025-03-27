@@ -23,31 +23,20 @@ export function handleAddProduct(model, req, res) {
   req.on("end", async () => {
     const isId = await model.estimatedDocumentCount();
     const { productName, productPrice, img } = JSON.parse(body);
-    res.writeHead(200);
-    return res.end(
-      JSON.stringify({
-        id: isId,
-        name: productName,
-        price: parseInt(productPrice),
-        image: Buffer.from(img),
-      })
-    );
-    /*
-    
-    const toCreate = await model.create([
+    const toInsert = await model.create([
       {
         id: isId + 1,
-        name: isObj.productName,
-        price: parseInt(isObj.productPrice),
-        img: Buffer.from(isObj.img),
+        name: productName,
+        price: productPrice,
+        img: Buffer.from(img),
       },
+      { ordered: true },
     ]);
-    if (!toCreate) {
+    if (!Object.hasOwn(toInsert, "name")) {
       res.writeHead(400);
       return res.end(JSON.stringify({ error: "Failed to create product" }));
     }
     res.writeHead(200);
     return res.end(JSON.stringify({ success: "Product Created" }));
-    */
   });
 }

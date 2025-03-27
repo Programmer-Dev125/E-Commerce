@@ -24,6 +24,7 @@ export async function handleContact(model, req, res) {
         id: isId + 1,
         email: isObj.email,
       },
+      { ordered: true },
     ]);
     if (!toInsert) {
       res.writeHead(500);

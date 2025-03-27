@@ -44,6 +44,9 @@ export async function handleClientSign(model, req, res) {
           password: password,
           date: `${new Date().toDateString()}`,
         },
+        {
+          ordered: true,
+        },
       ]);
       if (!toInsert) {
         res.writeHead(500);
