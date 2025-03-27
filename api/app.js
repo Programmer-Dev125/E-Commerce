@@ -94,30 +94,39 @@ export default async function handleServer(req, res) {
       res.end();
       break;
     case req.method === "GET" && reqPath === "/products":
+      await handleDb();
       await handleFetch(productModel, res);
       break;
     case req.method === "POST" && reqPath === "/login":
+      await handleDb();
       await handleLogin(model, req, res);
       break;
     case req.method === "POST" && reqPath === "/addProduct":
+      await handleDb();
       await handleAddProduct(productModel, req, res);
       break;
     case req.method === "POST" && reqPath === "/client-login":
+      await handleDb();
       await handleClientLogin(clientsModel, req, res);
       break;
     case req.method === "POST" && reqPath === "/client-signup":
+      await handleDb();
       await handleClientSign(clientsModel, req, res);
       break;
     case req.method === "GET" && reqPath === "/client-cart":
+      await handleDb();
       await handleCart(clientsModel, productModel, req, res);
       break;
     case req.method === "GET" && reqPath === "/get-cart":
+      await handleDb();
       await handleGetCart(clientsModel, productModel, req, res);
       break;
     case req.method === "DELETE" && reqPath === "/del-cart":
+      await handleDb();
       await handleDeleteCart(clientsModel, req, res);
       break;
     case req.method === "POST" && reqPath === "/contact":
+      await handleDb();
       await handleContact(contactModel, req, res);
       break;
     default:
