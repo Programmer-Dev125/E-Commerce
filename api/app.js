@@ -21,7 +21,7 @@ const model = conn.model(
 );
 
 const productModel = conn.model(
-  "productModel",
+  "toProduct",
   new Schema(
     {
       id: { type: Number, required: true, unique: true },

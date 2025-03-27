@@ -27,7 +27,7 @@ export function handleAddProduct(model, req, res) {
       {
         id: isId + 1,
         name: productName,
-        price: productPrice,
+        price: parseInt(productPrice),
         img: Buffer.from(img),
       },
       { ordered: true },
