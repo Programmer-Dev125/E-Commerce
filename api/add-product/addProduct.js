@@ -40,21 +40,23 @@ export function handleAddProduct(model, req, res) {
           })
         );
       }
-      const isId = await model.estimatedDocumentCount();
-      const toCreate = await model.create([
-        {
-          id: isId + 1,
-          name: isObj.productName,
-          price: parseInt(isObj.productPrice),
-          img: Buffer.from(isObj.img),
-        },
-      ]);
-      if (!toCreate) {
-        res.writeHead(400);
-        return res.end(JSON.stringify({ error: "Failed to create product" }));
-      }
       res.writeHead(200);
-      return res.end(JSON.stringify({ success: "Product Created" }));
+      return res.end(JSON.stringify(isObj));
+      // const isId = await model.estimatedDocumentCount();
+      // const toCreate = await model.create([
+      //   {
+      //     id: isId + 1,
+      //     name: isObj.productName,
+      //     price: parseInt(isObj.productPrice),
+      //     img: Buffer.from(isObj.img),
+      //   },
+      // ]);
+      // if (!toCreate) {
+      //   res.writeHead(400);
+      //   return res.end(JSON.stringify({ error: "Failed to create product" }));
+      // }
+      // res.writeHead(200);
+      // return res.end(JSON.stringify({ success: "Product Created" }));
     })();
   });
 }
