@@ -9,68 +9,59 @@ import { handleGetCart } from "./client/cart/get/handleGetCart.js";
 import { handleDeleteCart } from "./client/cart/delete/handleDeleteCart.js";
 import { handleContact } from "./client/contact/handleContact.js";
 
-let model, productModel, clientsModel, contactModel;
+const conn = await mongoose.createConnection(process.env.MONGO_URL).asPromise();
 
-try {
-  const conn = await mongoose
-    .createConnection(process.env.MONGO_URL)
-    .asPromise();
+const model = conn.model(
+  "isModal",
+  new Schema(
+    { id: Number, name: String, password: String },
+    { autoIndex: false, autoCreate: false }
+  ),
+  process.env.USER
+);
 
-  model = conn.model(
-    "isModal",
-    new Schema(
-      { id: Number, name: String, password: String },
-      { autoIndex: false, autoCreate: false }
-    ),
-    process.env.USER
-  );
+const productModel = conn.model(
+  "productModel",
+  new Schema(
+    {
+      id: { type: Number, required: true, unique: true },
+      name: { type: String, required: true, unique: true },
+      price: { type: Number },
+      img: { type: Buffer, required: true },
+    },
+    { autoIndex: false, autoCreate: false }
+  ),
+  process.env.PRODUCTS
+);
 
-  productModel = conn.model(
-    "productModel",
-    new Schema(
-      {
-        id: { type: Number, required: true, unique: true },
-        name: { type: String, required: true, unique: true },
-        price: { type: Number },
-        img: { type: Buffer, required: true },
-      },
-      { autoIndex: false, autoCreate: false }
-    ),
-    process.env.PRODUCTS
-  );
+const clientsModel = conn.model(
+  "clientModal",
+  new Schema(
+    {
+      id: { type: Number, required: true, unique: true },
+      name: { type: String, required: true, unique: true },
+      email: { type: String, required: true, unique: true },
+      password: { type: String, required: true },
+      date: { type: String, required: true },
+      cart: { type: Array },
+      bought: { type: Array },
+    },
+    { autoIndex: false, autoCreate: false }
+  ),
+  process.env.USER
+);
 
-  clientsModel = conn.model(
-    "clientModal",
-    new Schema(
-      {
-        id: { type: Number, required: true, unique: true },
-        name: { type: String, required: true, unique: true },
-        email: { type: String, required: true, unique: true },
-        password: { type: String, required: true },
-        date: { type: String, required: true },
-        cart: { type: Array },
-        bought: { type: Array },
-      },
-      { autoIndex: false, autoCreate: false }
-    ),
-    process.env.USER
-  );
-
-  contactModel = conn.model(
-    "contactModel",
-    new Schema(
-      {
-        id: { type: Number, required: true, unique: true },
-        email: { type: String, required: true, unique: true },
-      },
-      { autoIndex: false, autoCreate: false }
-    ),
-    process.env.CONTACT
-  );
-} catch (err) {
-  console.log(err.name);
-  console.log(err.message);
-}
+const contactModel = conn.model(
+  "contactModel",
+  new Schema(
+    {
+      id: { type: Number, required: true, unique: true },
+      email: { type: String, required: true, unique: true },
+    },
+    { autoIndex: false, autoCreate: false }
+  ),
+  process.env.CONTACT
+);
 
 export default async function handleServer(req, res) {
   res.setHeader(
