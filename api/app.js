@@ -9,9 +9,14 @@ import { handleGetCart } from "./client/cart/get/handleGetCart.js";
 import { handleDeleteCart } from "./client/cart/delete/handleDeleteCart.js";
 import { handleContact } from "./client/contact/handleContact.js";
 
-const conn = await mongoose.createConnection(process.env.MONGO_URL).asPromise();
+let isConnected = false;
+async function handleDb() {
+  if (isConnected) true;
+  await mongoose.connect(process.env.MONGO_URL);
+  isConnected = true;
+}
 
-const model = conn.model(
+const model = mongoose.model(
   "isModal",
   new Schema(
     { id: Number, name: String, password: String },
@@ -20,7 +25,7 @@ const model = conn.model(
   process.env.USER
 );
 
-const productModel = conn.model(
+const productModel = mongoose.model(
   "toProduct",
   new Schema(
     {
@@ -34,7 +39,7 @@ const productModel = conn.model(
   process.env.PRODUCTS
 );
 
-const clientsModel = conn.model(
+const clientsModel = mongoose.model(
   "clientModal",
   new Schema(
     {
@@ -51,7 +56,7 @@ const clientsModel = conn.model(
   process.env.USER
 );
 
-const contactModel = conn.model(
+const contactModel = mongoose.model(
   "contactModel",
   new Schema(
     {
@@ -64,6 +69,8 @@ const contactModel = conn.model(
 );
 
 export default async function handleServer(req, res) {
+  await handleDb();
+
   res.setHeader(
     "access-control-allow-origin",
     "https://e-commerce-gamma-one-65.vercel.app"

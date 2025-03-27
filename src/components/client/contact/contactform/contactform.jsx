@@ -27,7 +27,7 @@ export default function ContactForm() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleForm(contacts, setReceived, setResponse);
+            handleForm(contacts, setReceived, setResponse, setContacts);
           }}
           className="flex-box-col g70"
         >

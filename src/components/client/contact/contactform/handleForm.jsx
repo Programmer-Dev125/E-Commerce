@@ -1,4 +1,9 @@
-export async function handleForm(contacts, setReceived, setResponse) {
+export async function handleForm(
+  contacts,
+  setReceived,
+  setResponse,
+  setContacts
+) {
   if (
     !contacts.name ||
     !contacts.email ||
@@ -58,6 +63,12 @@ export async function handleForm(contacts, setReceived, setResponse) {
     case 200:
       {
         const isResp = await isFetch.json();
+        setContacts({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
         setReceived(true);
         setResponse({
           danger: false,
@@ -78,7 +89,7 @@ export async function handleForm(contacts, setReceived, setResponse) {
         });
         setTimeout(() => {
           setReceived(false);
-        }, 800);
+        }, 2000);
       }
       break;
     case 500:
@@ -91,7 +102,7 @@ export async function handleForm(contacts, setReceived, setResponse) {
         });
         setTimeout(() => {
           setReceived(false);
-        }, 800);
+        }, 2000);
       }
       break;
     default:
@@ -102,7 +113,7 @@ export async function handleForm(contacts, setReceived, setResponse) {
       });
       setTimeout(() => {
         setReceived(false);
-      }, 800);
+      }, 2000);
       break;
   }
 }
