@@ -20,7 +20,7 @@ export default function AddProduct() {
         },
         body: JSON.stringify({
           ...contents,
-          // img: Array.from(new Uint8Array(img)),
+          img: Array.from(new Uint8Array(img)),
         }),
       }
     );

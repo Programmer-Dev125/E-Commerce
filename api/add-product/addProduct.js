@@ -21,10 +21,10 @@ export function handleAddProduct(model, req, res) {
     body += data;
   });
   req.on("end", async () => {
-    const { productName, productPrice } = JSON.parse(body);
+    const { productName, productPrice, img } = JSON.parse(body);
     res.writeHead(200);
     return res.end(
-      JSON.stringify({ name: productName, price: parseInt(productPrice) })
+      JSON.stringify({ name: productName, price: parseInt(productPrice), img })
     );
     /*
     if (
