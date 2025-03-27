@@ -30,7 +30,10 @@ export default function Client() {
     const db = indexedDB.open("client-db");
     db.addEventListener("upgradeneeded", (e) => {
       const database = e.target.result;
-      database.createObjectStore("client-user", { keyPath: "id" });
+      database.createObjectStore("client-user", {
+        keyPath: "id",
+        autoIncrement: true,
+      });
     });
     let isResp = [];
     (async () => {
