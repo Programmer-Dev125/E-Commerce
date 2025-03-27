@@ -21,9 +21,9 @@ export function handleAddProduct(model, req, res) {
     body += data;
   });
   req.on("end", async () => {
-    const isObj = JSON.parse(body);
+    const { productName, productPrice } = JSON.parse(body);
     res.writeHead(200);
-    return res.end(JSON.stringify(isObj));
+    return res.end(JSON.stringify(productName, parseInt(productPrice)));
     /*
     if (
       !Object.hasOwn(isObj, "productName") ||
