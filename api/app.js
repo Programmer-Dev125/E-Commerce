@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose";
 import { handleLogin } from "./login/login.js";
 import { handleAddProduct } from "./add-product/addProduct.js";
 import { handleFetch } from "./fetch/fetch.js";
-import { createReadStream, existsSync } from "node:fs";
 import { handleClientLogin } from "./client/sign/login.js";
 import { handleClientSign } from "./client/sign/sign.js";
 import { handleCart } from "./client/cart/cart.js";
