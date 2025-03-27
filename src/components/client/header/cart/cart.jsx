@@ -21,6 +21,14 @@ export default function Cart({ onCartModal, onBuyModal }) {
         .get(1);
       isGet.addEventListener("success", async (ev) => {
         const user = ev.target.result;
+        if (!user) {
+          setReceived(true);
+          setResponse({
+            danger: true,
+            message: "Sign in first",
+          });
+          setTimeout(() => setReceived(false), 2000);
+        }
         await handleGet(setCarts, user);
       });
     });

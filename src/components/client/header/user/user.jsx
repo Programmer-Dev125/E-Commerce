@@ -35,10 +35,6 @@ export default function User({ onUserModal }) {
       });
     }
     const db = indexedDB.open("client-db");
-    db.addEventListener("upgradeneeded", (e) => {
-      const database = e.target.result;
-      database.createObjectStore("client-user", { keyPath: "id" });
-    });
     db.addEventListener("success", (e) => {
       const database = e.target.result;
       const hasUser = database

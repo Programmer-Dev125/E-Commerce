@@ -27,6 +27,11 @@ export default function Client() {
       setCurrent(window.location.pathname);
     }
     window.addEventListener("popstate", handleHistory);
+    const db = indexedDB.open("client-db");
+    db.addEventListener("upgradeneeded", (e) => {
+      const database = e.target.result;
+      database.createObjectStore("client-user", { keyPath: "id" });
+    });
     let isResp = [];
     (async () => {
       const isFetch = await fetch(
