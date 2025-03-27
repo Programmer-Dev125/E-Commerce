@@ -8,7 +8,7 @@ export async function handleCart(id, setReceived, setResponse) {
       .get(1);
     isResult.addEventListener("success", async (ev) => {
       const user = ev.target.result;
-      if (!Object.hasOwn(user, "signin") || !Object.hasOwn(user, "email")) {
+      if (!user) {
         setReceived(true);
         setResponse({
           danger: true,
