@@ -15,7 +15,7 @@ export async function handleCart(id, setReceived, setResponse) {
             "content-type": "application/json",
             "x-product-id": id,
             "x-current-user": JSON.stringify(user),
-            "x-request-path": "client-cart",
+            "x-request-path": "/client-cart",
           },
           credentials: "include",
         }
