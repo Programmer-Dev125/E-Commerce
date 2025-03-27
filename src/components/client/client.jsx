@@ -52,10 +52,12 @@ export default function Client() {
             setProducts(isResp);
           }
           break;
-        case 500: {
-          isResp = await isFetch.json();
-          console.log(isResp);
-        }
+        case 500:
+          {
+            isResp = await isFetch.json();
+            console.log(isResp);
+          }
+          break;
         default:
           console.log("invalid request");
           break;
