@@ -21,34 +21,19 @@ export function handleAddProduct(model, req, res) {
     body += data;
   });
   req.on("end", async () => {
+    const isId = await model.estimatedDocumentCount();
     const { productName, productPrice, img } = JSON.parse(body);
     res.writeHead(200);
     return res.end(
       JSON.stringify({
+        id: isId,
         name: productName,
         price: parseInt(productPrice),
         image: img,
       })
     );
     /*
-    if (
-      !Object.hasOwn(isObj, "productName") ||
-      !Object.hasOwn(isObj, "productPrice")
-    ) {
-      res.writeHead(400);
-      return res.end(JSON.stringify({ error: "Missing request body" }));
-    }
-    const hasNameExists = await model.findOne({ name: isObj.name });
-    if (Object.hasOwn(hasNameExists, "name")) {
-      res.writeHead(400);
-      return res.end(
-        JSON.stringify({
-          error: "Product Name already exists, give product a unique name",
-        })
-      );
-    }
-    res.writeHead(200);
-    return res.end(JSON.stringify(isObj));
+    
     const isId = await model.estimatedDocumentCount();
     const toCreate = await model.create([
       {
