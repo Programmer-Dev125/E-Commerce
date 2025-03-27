@@ -8,6 +8,16 @@ export async function handleCart(id, setReceived, setResponse) {
       .get(1);
     isResult.addEventListener("success", async (ev) => {
       const user = ev.target.result;
+      if (!user) {
+        setReceived(true);
+        setResponse({
+          danger: true,
+          message: "Sign in first",
+        });
+        setTimeout(() => setReceived(false), 2000);
+        return;
+      }
+
       const isFetch = await fetch(
         "https://e-commerce-gamma-one-65.vercel.app/api/app",
         {
