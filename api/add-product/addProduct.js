@@ -23,7 +23,9 @@ export function handleAddProduct(model, req, res) {
   req.on("end", async () => {
     const { productName, productPrice } = JSON.parse(body);
     res.writeHead(200);
-    return res.end(JSON.stringify(productName, parseInt(productPrice)));
+    return res.end(
+      JSON.stringify({ name: productName, price: parseInt(productPrice) })
+    );
     /*
     if (
       !Object.hasOwn(isObj, "productName") ||
