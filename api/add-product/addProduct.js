@@ -46,7 +46,7 @@ export function handleAddProduct(model, req, res) {
           id: isId + 1,
           name: isObj.productName.trim(),
           price: parseInt(isObj.productPrice),
-          img: Buffer.from(isObj.img),
+          // img: Buffer.from(isObj.img),
         },
       ]);
       if (!toCreate) {

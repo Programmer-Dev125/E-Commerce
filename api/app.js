@@ -27,7 +27,7 @@ const productModel = conn.model(
       id: { type: Number, required: true, unique: true },
       name: { type: String, required: true, unique: true },
       price: { type: Number },
-      img: { type: Buffer, required: true },
+      // img: { type: Buffer, required: true },
     },
     { autoIndex: false, autoCreate: false }
   ),
