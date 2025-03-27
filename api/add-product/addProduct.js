@@ -44,9 +44,9 @@ export function handleAddProduct(model, req, res) {
       const toCreate = await model.create([
         {
           id: isId + 1,
-          name: isObj.productName.trim(),
+          name: isObj.productName,
           price: parseInt(isObj.productPrice),
-          // img: Buffer.from(isObj.img),
+          img: Buffer.from(isObj.img),
         },
       ]);
       if (!toCreate) {
