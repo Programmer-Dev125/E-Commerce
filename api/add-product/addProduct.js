@@ -23,8 +23,8 @@ export function handleAddProduct(model, req, res) {
   req.on("end", () => {
     const isObj = JSON.parse(body);
     if (
-      !Object.hasOwn(isObj, "name") ||
-      !Object.hasOwn(isObj, "price") ||
+      !Object.hasOwn(isObj, "productName") ||
+      !Object.hasOwn(isObj, "productPrice") ||
       !Object.hasOwn(isObj, "img")
     ) {
       res.writeHead(400);
@@ -44,8 +44,8 @@ export function handleAddProduct(model, req, res) {
       const toCreate = await model.create([
         {
           id: isId + 1,
-          name: isObj.name.trim(),
-          price: parseInt(isObj.price),
+          name: isObj.productName.trim(),
+          price: parseInt(isObj.productPrice),
           img: Buffer.from(isObj.img),
         },
       ]);
