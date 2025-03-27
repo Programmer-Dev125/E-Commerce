@@ -65,84 +65,59 @@ const contactModel = conn.model(
 );
 
 export default async function handleServer(req, res) {
-  try {
-    await connectDB(); // Ensure MongoDB is connected
+  res.setHeader(
+    "access-control-allow-origin",
+    "https://e-commerce-gamma-one-65.vercel.app"
+  );
+  res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
+  res.setHeader(
+    "access-control-allow-headers",
+    "content-type, x-product-id, x-current-user, x-request-path"
+  );
+  res.setHeader("content-type", "application/json");
+  res.setHeader("access-control-allow-credentials", "true");
 
-    res.setHeader(
-      "access-control-allow-origin",
-      "https://e-commerce-gamma-one-65.vercel.app"
-    );
-    res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
-    res.setHeader(
-      "access-control-allow-headers",
-      "content-type, x-product-id, x-current-user, x-request-path"
-    );
-    res.setHeader("content-type", "application/json");
-    res.setHeader("access-control-allow-credentials", "true");
+  const reqPath = req.headers["x-request-path"];
+  if (!reqPath) {
+    res.writeHead(400);
+    return res.end(JSON.stringify({ error: "Request path not included" }));
+  }
 
-    // ✅ Handle image serving properly
-    if (req.url.startsWith("/images")) {
-      const path = `.${req.url}`;
-      if (existsSync(path)) {
-        res.writeHead(200, { "content-type": "image/png" });
-        const read = createReadStream(path).pipe(res);
-        read.on("end", () => res.end());
-        return;
-      }
-      res.writeHead(400);
-      return res.end(JSON.stringify({ error: "Image doesn't exist" }));
-    }
-
-    // ✅ Ensure request path is provided
-    const reqPath = req.headers["x-request-path"];
-    if (!reqPath) {
-      res.writeHead(400);
-      return res.end(JSON.stringify({ error: "Request path not included" }));
-    }
-
-    // ✅ Route handling with switch-case
-    switch (true) {
-      case req.method === "OPTIONS":
-        res.writeHead(200);
-        res.end();
-        break;
-      case req.method === "GET" && reqPath === "/products":
-        handleFetch(productModel, res);
-        break;
-      case req.method === "POST" && reqPath === "/login":
-        handleLogin(model, req, res);
-        break;
-      case req.method === "POST" && reqPath === "/addProduct":
-        handleAddProduct(productModel, req, res);
-        break;
-      case req.method === "POST" && reqPath === "/client-login":
-        handleClientLogin(clientsModel, req, res);
-        break;
-      case req.method === "POST" && reqPath === "/client-signup":
-        handleClientSign(clientsModel, req, res);
-        break;
-      case req.method === "GET" && reqPath === "/client-cart":
-        handleCart(clientsModel, productModel, req, res);
-        break;
-      case req.method === "GET" && reqPath === "/get-cart":
-        handleGetCart(clientsModel, productModel, req, res);
-        break;
-      case req.method === "DELETE" && reqPath === "/del-cart":
-        handleDeleteCart(clientsModel, req, res);
-        break;
-      case req.method === "POST" && reqPath === "/contact":
-        handleContact(contactModel, req, res);
-        break;
-      default:
-        res.writeHead(405);
-        res.end(
-          JSON.stringify({ error: "Invalid Request Method or pathname" })
-        );
-        break;
-    }
-  } catch (error) {
-    console.error("❌ Server Error:", error);
-    res.writeHead(500);
-    res.end(JSON.stringify({ error: "Internal Server Error" }));
+  switch (true) {
+    case req.method === "OPTIONS":
+      res.writeHead(200);
+      res.end();
+      break;
+    case req.method === "GET" && reqPath === "/products":
+      handleFetch(productModel, res);
+      break;
+    case req.method === "POST" && reqPath === "/login":
+      handleLogin(model, req, res);
+      break;
+    case req.method === "POST" && reqPath === "/addProduct":
+      handleAddProduct(productModel, req, res);
+      break;
+    case req.method === "POST" && reqPath === "/client-login":
+      handleClientLogin(clientsModel, req, res);
+      break;
+    case req.method === "POST" && reqPath === "/client-signup":
+      handleClientSign(clientsModel, req, res);
+      break;
+    case req.method === "GET" && reqPath === "/client-cart":
+      handleCart(clientsModel, productModel, req, res);
+      break;
+    case req.method === "GET" && reqPath === "/get-cart":
+      handleGetCart(clientsModel, productModel, req, res);
+      break;
+    case req.method === "DELETE" && reqPath === "/del-cart":
+      handleDeleteCart(clientsModel, req, res);
+      break;
+    case req.method === "POST" && reqPath === "/contact":
+      handleContact(contactModel, req, res);
+      break;
+    default:
+      res.writeHead(405);
+      res.end(JSON.stringify({ error: "Invalid Request Method or pathname" }));
+      break;
   }
 }
