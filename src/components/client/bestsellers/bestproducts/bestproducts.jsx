@@ -14,36 +14,45 @@ export default function BestProducts({ onBuy, data }) {
   }, [data]);
   return (
     <div className="product-section-row" ref={isRef}>
-      {data.map((product) => (
-        <div key={product.id} className="mr5 ml10">
-          <img src={product.img} alt="product image" />
-          <div className="flex-box-row sp-between mt20">
-            <p className="client-title" title={product.name}>
-              {product.name}
-            </p>
-            <p className="client-price-text">{product.price}</p>
-          </div>
-          <div className="w50 mt5">
-            <div
-              className="product-section-btn"
-              onClick={() =>
-                onBuy(true, product.name, product.price, product.img)
-              }
-            >
-              <p className="client-text mt0 mb0">Buy</p>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+      {data.length === 0 ? (
+        <div className="spinner-parent">
+          <div
+            className="spinner"
+            style={{ borderTop: "5px solid #000000" }}
+          ></div>
+        </div>
+      ) : (
+        data.map((product) => (
+          <div key={product.id} className="mr5 ml10">
+            <img src={product.img} alt="product image" />
+            <div className="flex-box-row sp-between mt20">
+              <p className="client-title" title={product.name}>
+                {product.name}
+              </p>
+              <p className="client-price-text">{product.price}</p>
+            </div>
+            <div className="w50 mt5">
+              <div
+                className="product-section-btn"
+                onClick={() =>
+                  onBuy(true, product.name, product.price, product.img)
+                }
               >
-                {cartBtnIcon}
-              </svg>
+                <p className="client-text mt0 mb0">Buy</p>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {cartBtnIcon}
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }

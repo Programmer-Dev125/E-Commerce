@@ -21,35 +21,46 @@ export default function Product({ onBuy, data }) {
   return (
     <>
       <div className="get-product" ref={isRef}>
-        {data.map((product) => (
-          <div key={product.id} className="flex-box-col w100 mb60">
-            <div className="relative card-img">
-              <img src={product.img} alt="Product image" />
-              <div
-                className="cart-icon"
-                onClick={() => handleCart(product.id, setReceived, setResponse)}
-              >
-                {cartIcon}
-              </div>
-            </div>
-            <div className="flex-box-col g15 mt20">
-              <div>{starIcons}</div>
-              <div className="flex-box-row sp-between align-center">
-                <p className="mt0 mb0 client-title">{product.name}</p>
-                <p className="mt0 mb0 client-price-text">{product.price}</p>
-              </div>
-              <div className="w40 btn-is">
-                <button
+        {data.length === 0 ? (
+          <div className="spinner-parent">
+            <div
+              className="spinner"
+              style={{ borderTop: "5px solid #000000" }}
+            ></div>
+          </div>
+        ) : (
+          data.map((product) => (
+            <div key={product.id} className="flex-box-col w100 mb60">
+              <div className="relative card-img">
+                <img src={product.img} alt="Product image" />
+                <div
+                  className="cart-icon"
                   onClick={() =>
-                    onBuy(true, product.name, product.price, product.img)
+                    handleCart(product.id, setReceived, setResponse)
                   }
                 >
-                  Buy
-                </button>
+                  {cartIcon}
+                </div>
+              </div>
+              <div className="flex-box-col g15 mt20">
+                <div>{starIcons}</div>
+                <div className="flex-box-row sp-between align-center">
+                  <p className="mt0 mb0 client-title">{product.name}</p>
+                  <p className="mt0 mb0 client-price-text">{product.price}</p>
+                </div>
+                <div className="w40 btn-is">
+                  <button
+                    onClick={() =>
+                      onBuy(true, product.name, product.price, product.img)
+                    }
+                  >
+                    Buy
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       {received && (
         <div className={`cart-message ${response.danger ? "danger" : ""}`}>

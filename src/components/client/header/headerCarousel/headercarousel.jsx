@@ -15,7 +15,11 @@ export default function HeaderCarousel({ onBuy, data }) {
     <div className="w35 header-carousel-div">
       {isData.length === 0 ? (
         <div className="spinner-parent">
-          <div className="spinner"></div> :
+          <div
+            className="spinner"
+            style={{ borderTop: "5px solid #ffffff" }}
+          ></div>
+          :
         </div>
       ) : (
         isData.map((data) => {

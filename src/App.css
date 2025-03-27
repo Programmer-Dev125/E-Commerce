@@ -111,7 +111,6 @@
   width: 30px;
   height: 30px;
   border: 5px solid #ddd;
-  border-top: 5px solid #ffffff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
