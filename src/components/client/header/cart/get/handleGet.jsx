@@ -13,8 +13,16 @@ export async function handleGet(setCarts, user) {
   switch (isFetch.status) {
     case 200:
       {
-        const isResp = await isFetch.json();
+        let isResp = [];
+        isResp = await isFetch.json();
         if (isResp.success) return;
+        for (let i = 0; i < isResp.length; i++) {
+          isResp[i].img = URL.createObjectURL(
+            new Blob([new Uint8Array(isResp[i].img.data)], {
+              type: "image/png",
+            })
+          );
+        }
         setCarts(isResp);
       }
       break;
