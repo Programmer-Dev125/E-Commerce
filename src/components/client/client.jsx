@@ -21,14 +21,13 @@ export default function Client() {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productImg, setProductImg] = useState("");
-  const blobsRef = useRef([]);
 
   useEffect(() => {
     function handleHistory() {
       setCurrent(window.location.pathname);
     }
     window.addEventListener("popstate", handleHistory);
-
+    let isResp = [];
     (async () => {
       const isFetch = await fetch(
         "https://e-commerce-gamma-one-65.vercel.app/api/app",
@@ -39,26 +38,36 @@ export default function Client() {
           },
         }
       );
-      const isResp = await isFetch.json();
-
-      blobsRef.current.forEach((url) => URL.revokeObjectURL(url));
-      blobsRef.current = [];
-
-      const updatedProducts = isResp.map((item) => {
-        const blobUrl = URL.createObjectURL(
-          new Blob([new Uint8Array(item.img.data)], { type: "image/png" })
-        );
-        blobsRef.current.push(blobUrl);
-        return { ...item, img: blobUrl };
-      });
-
-      setProducts(updatedProducts);
+      switch (isFetch.status) {
+        case 200:
+          {
+            isResp = await isFetch.json();
+            for (let i = 0; i < isResp.length; i++) {
+              isResp[i].img = URL.createObjectURL(
+                new Blob([new Uint8Array(isResp[i].img.data)], {
+                  type: "image/png",
+                })
+              );
+            }
+            setProducts(isResp);
+          }
+          break;
+        case 500: {
+          isResp = await isFetch.json();
+          console.log(isResp);
+        }
+        default:
+          console.log("invalid request");
+          break;
+      }
     })();
 
     return () => {
-      blobsRef.current.forEach((url) => URL.revokeObjectURL(url));
-      blobsRef.current = [];
-      window.removeEventListener("popstate", handleHistory);
+      if (isResp.length > 0) {
+        for (let i = 0; i < isResp.length; i++) {
+          URL.revokeObjectURL(isResp[i].img);
+        }
+      }
     };
   }, []);
 

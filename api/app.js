@@ -10,78 +10,60 @@ import { handleGetCart } from "./client/cart/get/handleGetCart.js";
 import { handleDeleteCart } from "./client/cart/delete/handleDeleteCart.js";
 import { handleContact } from "./client/contact/handleContact.js";
 
-let conn;
-let model, productModel, clientsModel, contactModel;
+const conn = await mongoose.createConnection(process.env.MONGO_URL).asPromise();
 
-// ✅ Create a function to initialize the database connection
-async function connectDB() {
-  if (conn) return conn; // If already connected, return the existing connection
+const model = conn.model(
+  "isModal",
+  new Schema(
+    { id: Number, name: String, password: String },
+    { autoIndex: false, autoCreate: false }
+  ),
+  process.env.USER
+);
 
-  try {
-    conn = await mongoose.connect(process.env.MONGO_URL);
-    console.log("✅ MongoDB Connected");
+const productModel = conn.model(
+  "productModel",
+  new Schema(
+    {
+      id: { type: Number, required: true, unique: true },
+      name: { type: String, required: true, unique: true },
+      price: { type: Number },
+      img: { type: Buffer, required: true },
+    },
+    { autoIndex: false, autoCreate: false }
+  ),
+  process.env.PRODUCTS
+);
 
-    // Define models AFTER connection is established
-    model = conn.model(
-      "isModal",
-      new Schema(
-        { id: Number, name: String, password: String },
-        { autoIndex: false, autoCreate: false }
-      ),
-      process.env.USER
-    );
+const clientsModel = conn.model(
+  "clientModal",
+  new Schema(
+    {
+      id: { type: Number, required: true, unique: true },
+      name: { type: String, required: true, unique: true },
+      email: { type: String, required: true, unique: true },
+      password: { type: String, required: true },
+      date: { type: String, required: true },
+      cart: { type: Array },
+      bought: { type: Array },
+    },
+    { autoIndex: false, autoCreate: false }
+  ),
+  process.env.USER
+);
 
-    productModel = conn.model(
-      "productModel",
-      new Schema(
-        {
-          id: { type: Number, required: true, unique: true },
-          name: { type: String, required: true, unique: true },
-          price: { type: Number },
-          img: { type: Buffer, required: true },
-        },
-        { autoIndex: false, autoCreate: false }
-      ),
-      process.env.PRODUCTS
-    );
+const contactModel = conn.model(
+  "contactModel",
+  new Schema(
+    {
+      id: { type: Number, required: true, unique: true },
+      email: { type: String, required: true, unique: true },
+    },
+    { autoIndex: false, autoCreate: false }
+  ),
+  process.env.CONTACT
+);
 
-    clientsModel = conn.model(
-      "clientModal",
-      new Schema(
-        {
-          id: { type: Number, required: true, unique: true },
-          name: { type: String, required: true, unique: true },
-          email: { type: String, required: true, unique: true },
-          password: { type: String, required: true },
-          date: { type: String, required: true },
-          cart: { type: Array },
-          bought: { type: Array },
-        },
-        { autoIndex: false, autoCreate: false }
-      ),
-      process.env.USER
-    );
-
-    contactModel = conn.model(
-      "contactModel",
-      new Schema(
-        {
-          id: { type: Number, required: true, unique: true },
-          email: { type: String, required: true, unique: true },
-        },
-        { autoIndex: false, autoCreate: false }
-      ),
-      process.env.CONTACT
-    );
-
-    return conn;
-  } catch (error) {
-    console.error("❌ MongoDB Connection Error:", error);
-    throw new Error("Failed to connect to MongoDB");
-  }
-}
-
-// ✅ Ensure database is ready before handling requests
 export default async function handleServer(req, res) {
   try {
     await connectDB(); // Ensure MongoDB is connected
