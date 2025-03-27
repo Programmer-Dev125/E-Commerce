@@ -24,7 +24,11 @@ export function handleAddProduct(model, req, res) {
     const { productName, productPrice, img } = JSON.parse(body);
     res.writeHead(200);
     return res.end(
-      JSON.stringify({ name: productName, price: parseInt(productPrice), img })
+      JSON.stringify({
+        name: productName,
+        price: parseInt(productPrice),
+        image: img,
+      })
     );
     /*
     if (
