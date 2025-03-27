@@ -1,5 +1,6 @@
 import { handleVerify } from "../jwt.js";
-import { handleDb } from "../db.js";
+import { handleDb } from "../app.js";
+
 export function handleAddProduct(model, req, res) {
   const cookie = req.headers.cookie;
   if (!cookie) {

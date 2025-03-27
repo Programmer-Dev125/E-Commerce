@@ -8,7 +8,12 @@ import { handleCart } from "./client/cart/cart.js";
 import { handleGetCart } from "./client/cart/get/handleGetCart.js";
 import { handleDeleteCart } from "./client/cart/delete/handleDeleteCart.js";
 import { handleContact } from "./client/contact/handleContact.js";
-import { handleDb } from "./db.js";
+
+export async function handleDb() {
+  if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(process.env.MONGO_URL);
+  }
+}
 
 const model = mongoose.model(
   "isModal",

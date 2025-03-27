@@ -1,4 +1,4 @@
-import { handleDb } from "../../db.js";
+import { handleDb } from "../../app.js";
 export async function handleContact(model, req, res) {
   let body = "";
   req.on("data", (data) => {
