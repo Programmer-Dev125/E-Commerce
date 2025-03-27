@@ -25,18 +25,16 @@ export function handleAddProduct(model, req, res) {
     await handleDb();
     const isId = await model.estimatedDocumentCount();
     const { productName, productPrice, img } = JSON.parse(body);
-    const toInsert = await model.create([
-      {
-        id: isId + 1,
-        name: productName,
-        price: parseInt(productPrice),
-        img: Buffer.from(img),
-      },
-      { ordered: true },
-    ]);
-    if (!toInsert) {
-      res.writeHead(400);
-      return res.end(JSON.stringify({ error: "Failed to create product" }));
+    const toInsert = new model({
+      id: isId + 1,
+      name: productName,
+      price: parseInt(productPrice),
+      img: Buffer.from(img),
+    });
+    const isSaved = await toInsert.save();
+    if (!isSaved) {
+      res.writeHead(500);
+      return res.end(JSON.stringify({ error: "server failed to add product" }));
     }
     res.writeHead(200);
     return res.end(JSON.stringify({ success: "Product Created" }));

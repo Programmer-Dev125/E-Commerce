@@ -20,14 +20,13 @@ export async function handleContact(model, req, res) {
       );
     }
     const isId = await model.estimatedDocumentCount();
-    const toInsert = await model.create([
-      {
-        id: isId + 1,
-        email: isObj.email,
-      },
-      { ordered: true },
-    ]);
-    if (!toInsert) {
+    const toInsert = new model({
+      id: isId + 1,
+      email: isObj.email,
+    });
+    const isSaved = await toInsert.save();
+
+    if (!isSaved) {
       res.writeHead(500);
       return res.end(JSON.stringify({ error: "Failed to send mail" }));
     }
