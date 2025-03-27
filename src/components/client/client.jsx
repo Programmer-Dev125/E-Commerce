@@ -29,12 +29,15 @@ export default function Client() {
     window.addEventListener("popstate", handleHistory);
     let isResp = [];
     (async () => {
-      const isFetch = await fetch("/api/app", {
-        headers: {
-          "content-type": "application/json",
-          "x-request-path": "/products",
-        },
-      });
+      const isFetch = await fetch(
+        "https://e-commerce-gamma-one-65.vercel.app/api/app",
+        {
+          headers: {
+            "content-type": "application/json",
+            "x-request-path": "/products",
+          },
+        }
+      );
       switch (isFetch.status) {
         case 200:
           {
