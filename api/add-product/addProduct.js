@@ -29,12 +29,11 @@ export function handleAddProduct(model, req, res) {
         id: isId,
         name: productName,
         price: parseInt(productPrice),
-        image: img,
+        image: Buffer.from(img),
       })
     );
     /*
     
-    const isId = await model.estimatedDocumentCount();
     const toCreate = await model.create([
       {
         id: isId + 1,
