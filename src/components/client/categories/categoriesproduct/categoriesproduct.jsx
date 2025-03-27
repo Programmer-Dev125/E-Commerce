@@ -22,7 +22,10 @@ export default function CategoriesProduct({ data }) {
     <>
       <div className="get-categories" ref={isRef}>
         {data.length === 0 ? (
-          <div className="spinner-parent">
+          <div
+            className="spinner-parent"
+            style={{ width: "100%", height: "100%" }}
+          >
             <div
               className="spinner"
               style={{ borderTop: "5px solid #000000" }}

@@ -1,5 +1,5 @@
 import { handleVerify } from "../jwt.js";
-
+import { handleDb } from "../db.js";
 export function handleAddProduct(model, req, res) {
   const cookie = req.headers.cookie;
   if (!cookie) {
@@ -21,6 +21,7 @@ export function handleAddProduct(model, req, res) {
     body += data;
   });
   req.on("end", async () => {
+    await handleDb();
     const isId = await model.estimatedDocumentCount();
     const { productName, productPrice, img } = JSON.parse(body);
     const toInsert = await model.create([
@@ -32,7 +33,7 @@ export function handleAddProduct(model, req, res) {
       },
       { ordered: true },
     ]);
-    if (!Object.hasOwn(toInsert, "name")) {
+    if (!toInsert) {
       res.writeHead(400);
       return res.end(JSON.stringify({ error: "Failed to create product" }));
     }

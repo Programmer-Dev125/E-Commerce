@@ -1,3 +1,4 @@
+import { handleDb } from "../../db.js";
 export async function handleContact(model, req, res) {
   let body = "";
   req.on("data", (data) => {
@@ -10,7 +11,7 @@ export async function handleContact(model, req, res) {
       res.writeHead(400);
       return res.end(JSON.stringify({ error: "Failed" }));
     }
-
+    await handleDb();
     const hasEmailExists = await model.exists({ email: isObj.email });
     if (hasEmailExists !== null) {
       res.writeHead(400);
