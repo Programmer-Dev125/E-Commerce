@@ -13,7 +13,6 @@
     "@fontsource/roboto": "^5.2.5",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.1",
-    "multiparty": "^4.2.3",
     "nodemailer": "^6.10.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
