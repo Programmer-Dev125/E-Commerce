@@ -76,7 +76,7 @@ export async function handleForm(
         });
         setTimeout(() => {
           setReceived(false);
-        }, 800);
+        }, 2000);
       }
       break;
     case 400:
