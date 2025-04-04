@@ -49,7 +49,6 @@ export async function handleCart(id, setReceived, setResponse, update) {
             danger: true,
             message: isResp.error,
           });
-          update;
           setTimeout(() => {
             setReceived(false);
           }, 1000);
