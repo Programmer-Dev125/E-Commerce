@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { cartIcon, starIcons } from "../../svg/paths";
 import { handleCart } from "../../header/cart/post/handleCart";
 
-export default function Product({ onBuy, data }) {
+export default function Product({ onBuy, data, update }) {
   const [received, setReceived] = useState(false);
   const [response, setResponse] = useState({
     danger: false,
@@ -36,7 +36,7 @@ export default function Product({ onBuy, data }) {
                 <div
                   className="cart-icon"
                   onClick={() =>
-                    handleCart(product.id, setReceived, setResponse)
+                    handleCart(product.id, setReceived, setResponse, update)
                   }
                 >
                   {cartIcon}

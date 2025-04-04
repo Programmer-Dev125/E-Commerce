@@ -1,4 +1,4 @@
-export async function handleCart(id, setReceived, setResponse) {
+export async function handleCart(id, setReceived, setResponse, update) {
   const db = indexedDB.open("client-db");
   db.addEventListener("success", (e) => {
     const database = e.target.result;
@@ -30,45 +30,39 @@ export async function handleCart(id, setReceived, setResponse) {
           credentials: "include",
         }
       );
+      const isResp = await isFetch.json();
       switch (isFetch.status) {
         case 200:
-          {
-            const isResp = await isFetch.json();
-            setReceived(true);
-            setResponse({
-              danger: false,
-              message: isResp.success,
-            });
-            setTimeout(() => {
-              setReceived(false);
-            }, 800);
-          }
+          setReceived(true);
+          update((prev) => (prev = !prev));
+          setResponse({
+            danger: false,
+            message: isResp.success,
+          });
+          setTimeout(() => {
+            setReceived(false);
+          }, 1000);
           break;
         case 400:
-          {
-            const isResp = await isFetch.json();
-            setReceived(true);
-            setResponse({
-              danger: true,
-              message: isResp.error,
-            });
-            setTimeout(() => {
-              setReceived(false);
-            }, 800);
-          }
+          setReceived(true);
+          setResponse({
+            danger: true,
+            message: isResp.error,
+          });
+          update;
+          setTimeout(() => {
+            setReceived(false);
+          }, 1000);
           break;
         case 500:
-          {
-            const isResp = await isFetch.json();
-            setReceived(true);
-            setResponse({
-              danger: true,
-              message: isResp.error,
-            });
-            setTimeout(() => {
-              setReceived(false);
-            }, 800);
-          }
+          setReceived(true);
+          setResponse({
+            danger: true,
+            message: isResp.error,
+          });
+          setTimeout(() => {
+            setReceived(false);
+          }, 1000);
           break;
         default:
           setReceived(true);
@@ -78,7 +72,7 @@ export async function handleCart(id, setReceived, setResponse) {
           });
           setTimeout(() => {
             setReceived(false);
-          }, 800);
+          }, 1000);
           break;
       }
     });

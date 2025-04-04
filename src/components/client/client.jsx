@@ -134,7 +134,7 @@ export default function Client() {
               setCurrent(val);
             }}
           />
-          <Categories data={products} />
+          <Categories data={products} update={setUpdate} />
           <AboutReview />
           <Contact />
         </>
@@ -149,6 +149,7 @@ export default function Client() {
               setProductImg(img);
             }}
             data={products}
+            update={setUpdate}
           />
         </>
       )}

@@ -21,47 +21,38 @@ export async function handleDelete(name, update, setReceived, setResponse) {
           credentials: "include",
         }
       );
+      const isResp = await isFetch.json();
       switch (isFetch.status) {
         case 200:
-          {
-            const isResp = await isFetch.json();
-            update((prev) => (prev = !prev));
-            setReceived(true);
-            setResponse({
-              danger: false,
-              message: isResp.success,
-            });
-            setTimeout(() => {
-              setReceived(false);
-            }, 1000);
-          }
+          update((prev) => (prev = !prev));
+          setReceived(true);
+          setResponse({
+            danger: false,
+            message: isResp.success,
+          });
+          setTimeout(() => {
+            setReceived(false);
+          }, 1000);
           break;
-
         case 400:
-          {
-            const isResp = await isFetch.json();
-            setReceived(true);
-            setResponse({
-              danger: true,
-              message: isResp.error,
-            });
-            setTimeout(() => {
-              setReceived(false);
-            }, 800);
-          }
+          setReceived(true);
+          setResponse({
+            danger: true,
+            message: isResp.error,
+          });
+          setTimeout(() => {
+            setReceived(false);
+          }, 1000);
           break;
         case 500:
-          {
-            const isResp = await isFetch.json();
-            setReceived(true);
-            setResponse({
-              danger: true,
-              message: isResp.error,
-            });
-            setTimeout(() => {
-              setReceived(false);
-            }, 800);
-          }
+          setReceived(true);
+          setResponse({
+            danger: true,
+            message: isResp.error,
+          });
+          setTimeout(() => {
+            setReceived(false);
+          }, 1000);
           break;
 
         default:
@@ -72,7 +63,7 @@ export async function handleDelete(name, update, setReceived, setResponse) {
           });
           setTimeout(() => {
             setReceived(false);
-          }, 800);
+          }, 1000);
           break;
       }
     });

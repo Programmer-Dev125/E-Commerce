@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { cartIcon, starIcons } from "../../svg/paths";
 import { handleCart } from "../../header/cart/post/handleCart";
 
-export default function CategoriesProduct({ data }) {
+export default function CategoriesProduct({ data, update }) {
   const [response, setResponse] = useState({
     danger: false,
     message: "",
@@ -38,7 +38,9 @@ export default function CategoriesProduct({ data }) {
                 <img src={cart.img} alt="img" className="cart-img" />
                 <div
                   className="cart-tag pointer"
-                  onClick={() => handleCart(cart.id, setReceived, setResponse)}
+                  onClick={() =>
+                    handleCart(cart.id, setReceived, setResponse, update)
+                  }
                 >
                   {cartIcon}
                 </div>
