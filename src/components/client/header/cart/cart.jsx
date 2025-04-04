@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { delIcon, buyIcon } from "../../svg/paths";
 import { handleDelete } from "./delete/handleDelete.jsx";
 
-export default function Cart({ carts, onCartModal, onBuyModal }) {
+export default function Cart({ carts, onCartModal, onBuyModal, update }) {
   const [received, setReceived] = useState(false);
   const [response, setResponse] = useState({
     danger: false,
@@ -57,8 +57,7 @@ export default function Cart({ carts, onCartModal, onBuyModal }) {
                       onClick={() => {
                         handleDelete(
                           cart.name,
-                          setCarts,
-                          carts,
+                          update,
                           setReceived,
                           setResponse
                         );

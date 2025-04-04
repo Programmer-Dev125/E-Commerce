@@ -15,6 +15,7 @@ import { handleGet } from "./header/cart/get/handleGet.jsx";
 export default function Client() {
   const [current, setCurrent] = useState(window.location.pathname);
   const [products, setProducts] = useState([]);
+  const [update, setUpdate] = useState(false);
   const [carts, setCarts] = useState([]);
   const [searchModal, setSearchModal] = useState(false);
   const [userModal, setUserModal] = useState(false);
@@ -96,7 +97,7 @@ export default function Client() {
         await handleGet(setCarts, user);
       });
     });
-  }, []);
+  }, [update]);
 
   return (
     <section className="flex-box-col g130">
@@ -161,6 +162,7 @@ export default function Client() {
             setProductPrice(price);
             setProductImg(img);
           }}
+          update={setUpdate}
           carts={carts}
         />
       )}

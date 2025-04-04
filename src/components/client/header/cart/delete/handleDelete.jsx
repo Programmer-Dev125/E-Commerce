@@ -1,10 +1,4 @@
-export async function handleDelete(
-  name,
-  setCarts,
-  carts,
-  setReceived,
-  setResponse
-) {
+export async function handleDelete(name, update, setReceived, setResponse) {
   const db = indexedDB.open("client-db");
   db.addEventListener("success", (e) => {
     const database = e.target.result;
@@ -31,11 +25,7 @@ export async function handleDelete(
         case 200:
           {
             const isResp = await isFetch.json();
-            const updateCart = carts.filter((item) => item.name !== name);
-            setCarts(updateCart);
-            if (updateCart.length === 0) {
-              setCarts([]);
-            }
+            update((prev) => (prev = !prev));
             setReceived(true);
             setResponse({
               danger: false,
@@ -43,7 +33,7 @@ export async function handleDelete(
             });
             setTimeout(() => {
               setReceived(false);
-            }, 800);
+            }, 1000);
           }
           break;
 
