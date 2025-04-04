@@ -1,30 +1,13 @@
 import { useEffect, useState } from "react";
 import { delIcon, buyIcon } from "../../svg/paths";
 import { handleDelete } from "./delete/handleDelete.jsx";
-import { handleGet } from "./get/handleGet.jsx";
 
-export default function Cart({ onCartModal, onBuyModal }) {
-  const [carts, setCarts] = useState([]);
+export default function Cart({ carts, onCartModal, onBuyModal }) {
   const [received, setReceived] = useState(false);
   const [response, setResponse] = useState({
     danger: false,
     message: "",
   });
-
-  useEffect(() => {
-    const db = indexedDB.open("client-db");
-    db.addEventListener("success", (e) => {
-      const database = e.target.result;
-      const isGet = database
-        .transaction("client-user")
-        .objectStore("client-user")
-        .get(1);
-      isGet.addEventListener("success", async (ev) => {
-        const user = ev.target.result;
-        await handleGet(setCarts, user);
-      });
-    });
-  }, []);
 
   useEffect(() => {
     const text = document.querySelectorAll(".cart-modal .truncate");

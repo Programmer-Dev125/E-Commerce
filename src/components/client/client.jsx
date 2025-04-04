@@ -10,10 +10,12 @@ import User from "./header/user/user.jsx";
 import Cart from "./header/cart/cart.jsx";
 import ProductBuy from "./products/product/buy/productbuy.jsx";
 import SearchCard from "./header/search/searchcard.jsx";
+import { handleGet } from "./header/cart/get/handleGet.jsx";
 
 export default function Client() {
   const [current, setCurrent] = useState(window.location.pathname);
   const [products, setProducts] = useState([]);
+  const [carts, setCarts] = useState([]);
   const [searchModal, setSearchModal] = useState(false);
   const [userModal, setUserModal] = useState(false);
   const [cartModal, setCartModal] = useState(false);
@@ -81,6 +83,21 @@ export default function Client() {
     };
   }, []);
 
+  useEffect(() => {
+    const db = indexedDB.open("client-db");
+    db.addEventListener("success", (e) => {
+      const database = e.target.result;
+      const isGet = database
+        .transaction("client-user")
+        .objectStore("client-user")
+        .get(1);
+      isGet.addEventListener("success", async (ev) => {
+        const user = ev.target.result;
+        await handleGet(setCarts, user);
+      });
+    });
+  }, []);
+
   return (
     <section className="flex-box-col g130">
       <Header
@@ -144,6 +161,7 @@ export default function Client() {
             setProductPrice(price);
             setProductImg(img);
           }}
+          carts={carts}
         />
       )}
       {productModal && (
