@@ -14,6 +14,10 @@ import { handleGet } from "./header/cart/get/handleGet.jsx";
 
 export default function Client() {
   const [current, setCurrent] = useState(window.location.pathname);
+  const [bio, setBio] = useState({
+    name: "",
+    email: "",
+  });
   const [products, setProducts] = useState([]);
   const [update, setUpdate] = useState(false);
   const [carts, setCarts] = useState([]);
@@ -85,18 +89,8 @@ export default function Client() {
   }, []);
 
   useEffect(() => {
-    const db = indexedDB.open("client-db");
-    db.addEventListener("success", (e) => {
-      const database = e.target.result;
-      const isGet = database
-        .transaction("client-user")
-        .objectStore("client-user")
-        .get(1);
-      isGet.addEventListener("success", async (ev) => {
-        const user = ev.target.result;
-        await handleGet(setCarts, user);
-      });
-    });
+    if (!bio.name || !bio.email) return;
+    handleGet(setCarts, bio.name);
   }, [update]);
 
   return (
@@ -153,7 +147,13 @@ export default function Client() {
           />
         </>
       )}
-      {userModal && <User onUserModal={(val) => setUserModal(val)} />}
+      {userModal && (
+        <User
+          onUserModal={(val) => setUserModal(val)}
+          bio={setBio}
+          update={setUpdate}
+        />
+      )}
       {cartModal && (
         <Cart
           onCartModal={(val) => setCartModal(val)}

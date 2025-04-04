@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Login from "./login/login";
 import Signup from "./signup/signup";
 
-export default function User({ onUserModal }) {
+export default function User({ onUserModal, bio, update }) {
   const [hasUser, setHasUser] = useState({
     bool: false,
     user: "",
@@ -34,6 +34,9 @@ export default function User({ onUserModal }) {
         width: `${active.offsetWidth}px`,
       });
     }
+  }, []);
+
+  useEffect(() => {
     const db = indexedDB.open("client-db");
     db.addEventListener("success", (e) => {
       const database = e.target.result;
@@ -49,6 +52,10 @@ export default function User({ onUserModal }) {
             user: data.name,
             email: data.email,
             bool: true,
+          });
+          bio({
+            name: data.name,
+            email: data.email,
           });
         }
       });
@@ -99,9 +106,9 @@ export default function User({ onUserModal }) {
               ></div>
             </div>
             {isLogin ? (
-              <Login onUpdate={(val) => setIsUpdate(val)} />
+              <Login onUpdate={(val) => setIsUpdate(val)} update={update} />
             ) : (
-              <Signup onUpdate={(val) => setIsUpdate(val)} />
+              <Signup onUpdate={(val) => setIsUpdate(val)} update={update} />
             )}
           </>
         )}

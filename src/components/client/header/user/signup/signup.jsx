@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Signup({ onUpdate }) {
+export default function Signup({ onUpdate, update }) {
   const [signInfo, setSignInfo] = useState({
     username: "",
     useremail: "",
@@ -53,6 +53,7 @@ export default function Signup({ onUpdate }) {
                 signin: true,
               });
             localStorage.setItem("user", true);
+            update((prev) => (prev = !prev));
             onUpdate(true);
           });
           db.addEventListener("error", (e) => {

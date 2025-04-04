@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Login({ onUpdate }) {
+export default function Login({ onUpdate, update }) {
   const [info, setInfo] = useState({
     email: "",
     password: "",
@@ -47,6 +47,7 @@ export default function Login({ onUpdate }) {
                 signin: true,
               });
             localStorage.setItem("user", true);
+            update((prev) => (prev = !prev));
             onUpdate(true);
           });
           db.addEventListener("error", (e) => {
