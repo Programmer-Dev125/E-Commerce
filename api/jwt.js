@@ -1,15 +1,7 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-export const token = jwt.sign(
-  JSON.parse(process.env.ADMIN_PAYLOAD),
-  process.env.ADMIN_KEY,
-  { algorithm: "HS512", expiresIn: "3d" }
-);
-
-export function handleVerify(isToken) {
-  return jwt.verify(isToken, process.env.ADMIN_KEY, { algorithms: "HS512" });
-}
-
+dotenv.config();
 export const clientToken = jwt.sign(
   JSON.parse(process.env.CLIENT_PAYLOAD),
   process.env.CLIENT_KEY,

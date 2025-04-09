@@ -31,7 +31,7 @@ export async function handleClientLogin(model, req, res) {
         "set-cookie": `_client-key=${clientToken}; max-age=259200`,
       });
       return res.end(
-        JSON.stringify({ success: "The user exist", name: hasExists.name })
+        JSON.stringify({ success: "Successfully logged", name: hasExists.name })
       );
     })();
   });

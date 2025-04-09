@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { handleLogin } from "./login/login.js";
-import { handleAddProduct } from "./add-product/addProduct.js";
+import { createServer } from "node:http";
 import { handleFetch } from "./fetch/fetch.js";
 import { handleClientLogin } from "./client/sign/login.js";
 import { handleClientSign } from "./client/sign/sign.js";
@@ -8,21 +7,14 @@ import { handleCart } from "./client/cart/cart.js";
 import { handleGetCart } from "./client/cart/get/handleGetCart.js";
 import { handleDeleteCart } from "./client/cart/delete/handleDeleteCart.js";
 import { handleContact } from "./client/contact/handleContact.js";
+import { handleCookie } from "./handleCookie.js";
+import { ClientVerify } from "./jwt.js";
 
 export async function handleDb() {
   if (mongoose.connection.readyState === 0) {
     await mongoose.connect(process.env.MONGO_URL);
   }
 }
-
-const model = mongoose.model(
-  "isModal",
-  new Schema(
-    { id: Number, name: String, password: String },
-    { autoIndex: false, autoCreate: false }
-  ),
-  process.env.USER
-);
 
 const productModel = mongoose.model(
   "toProduct",
@@ -46,7 +38,7 @@ const clientsModel = mongoose.model(
       name: { type: String, required: true, unique: true },
       email: { type: String, required: true, unique: true },
       password: { type: String, required: true },
-      date: { type: String, required: true },
+      date: { type: Date, required: true },
       cart: { type: Array },
       bought: { type: Array },
     },
@@ -82,6 +74,11 @@ export default async function handleServer(req, res) {
   res.setHeader("content-type", "application/json");
   res.setHeader("access-control-allow-credentials", "true");
 
+  if (req.method === "OPTIONS") {
+    res.writeHead(200);
+    return res.end();
+  }
+
   const reqPath = req.headers["x-request-path"];
   if (!reqPath) {
     res.writeHead(400);
@@ -89,33 +86,35 @@ export default async function handleServer(req, res) {
   }
 
   switch (true) {
-    case req.method === "OPTIONS":
-      res.writeHead(200);
-      res.end();
-      break;
     case req.method === "GET" && reqPath === "/products":
       handleFetch(productModel, res);
       break;
     case req.method === "POST" && reqPath === "/login":
-      handleLogin(model, req, res);
-      break;
-    case req.method === "POST" && reqPath === "/addProduct":
-      handleAddProduct(productModel, req, res);
-      break;
-    case req.method === "POST" && reqPath === "/client-login":
       handleClientLogin(clientsModel, req, res);
       break;
-    case req.method === "POST" && reqPath === "/client-signup":
+    case req.method === "POST" && reqPath === "/signup":
       handleClientSign(clientsModel, req, res);
       break;
-    case req.method === "GET" && reqPath === "/client-cart":
-      handleCart(clientsModel, productModel, req, res);
+    case req.method === "GET" && reqPath === "/add-cart":
+      handleCookie(req, res, ClientVerify).then((val) => {
+        if (val) {
+          handleCart(clientsModel, productModel, req, res);
+        }
+      });
       break;
     case req.method === "GET" && reqPath === "/get-cart":
-      handleGetCart(clientsModel, productModel, req, res);
+      handleCookie(req, res, ClientVerify).then((val) => {
+        if (val) {
+          handleGetCart(clientsModel, productModel, req, res);
+        }
+      });
       break;
     case req.method === "DELETE" && reqPath === "/del-cart":
-      handleDeleteCart(clientsModel, req, res);
+      handleCookie(req, res, ClientVerify).then((val) => {
+        if (val) {
+          handleDeleteCart(clientsModel, req, res);
+        }
+      });
       break;
     case req.method === "POST" && reqPath === "/contact":
       handleContact(contactModel, req, res);

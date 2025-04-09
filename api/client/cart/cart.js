@@ -1,24 +1,5 @@
-import { ClientVerify } from "../../jwt.js";
-
 export async function handleCart(model, productModel, req, res) {
-  const cookie = req.headers.cookie;
-  if (!cookie) {
-    res.writeHead(401, {
-      "www-authenticate":
-        "Bearer realm='Missing Authentication token';charset='utf8'",
-    });
-    return res.end(JSON.stringify({ error: "Credentials missing" }));
-  }
-  const token = cookie.split("=")[1];
-  const verify = ClientVerify(token);
-  if (!Object.hasOwn(verify, "client")) {
-    res.writeHead(403, {
-      "www-authenticate":
-        "Bearer realm='Invalid Authentication token';charset='utf8'",
-    });
-    return res.end(JSON.stringify({ error: "Invalid Authentication Token" }));
-  }
-  const productId = req.headers["x-product-id"];
+  const productId = parseInt(req.headers["x-product-id"]);
   const currUser = JSON.parse(req.headers["x-current-user"]);
   if (!productId || !currUser || !currUser.name || !currUser.email) {
     res.writeHead(400);
@@ -41,7 +22,7 @@ export async function handleCart(model, productModel, req, res) {
     res.writeHead(400);
     return res.end(JSON.stringify({ error: "user doesn't exists" }));
   }
-  console.log(hasProductExists, hasClientExists);
+
   for (let i = 0; i < hasClientExists.cart.length; i++) {
     if (hasClientExists.cart[i] === hasProductExists.name) {
       res.writeHead(400);
