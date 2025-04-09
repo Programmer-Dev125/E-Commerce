@@ -62,7 +62,7 @@ export default function Products() {
       <ProductsBar />
       <section className="g4 gp-15 tab-row rel" ref={itemRef}>
         {products.length === 0 ? (
-          <Spinner />
+          <Spinner spin={true} />
         ) : (
           products.map((product) => {
             return (
