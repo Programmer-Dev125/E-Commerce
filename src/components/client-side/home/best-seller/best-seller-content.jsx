@@ -34,7 +34,7 @@ export default function BestSellerContent() {
     <section className="rel">
       <section className="row-sc" ref={nameRef}>
         {products.length === 0 ? (
-          <Spinner />
+          <Spinner spin={true} />
         ) : (
           products.map((item) => {
             return (

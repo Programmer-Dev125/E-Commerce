@@ -26,7 +26,7 @@ export default function HeaderCarousel() {
             </div>
           </>
         ) : (
-          <Spinner />
+          <Spinner spin={true} />
         )}
       </div>
       <div className="g3 wf gp-30 mb30">

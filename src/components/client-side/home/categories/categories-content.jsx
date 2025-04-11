@@ -45,7 +45,7 @@ export default function CategoriesContent() {
   return (
     <section className="g4 gp-15 tab-row rel" ref={isRef}>
       {products.length === 0 ? (
-        <Spinner />
+        <Spinner spin={true} />
       ) : (
         products.map((item) => {
           return (

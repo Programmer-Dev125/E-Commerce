@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { handleAddCart } from "../handle-fn/handle-add-cart";
 import { onResponse, closeResponse } from "../global-state/response-slice";
 import { addCart } from "../global-state/cart-slice";
+import Spinner from "../spinner.jsx/spinner";
 
 export default function Products() {
   const itemRef = useRef(null);
@@ -61,9 +62,7 @@ export default function Products() {
       <ProductsBar />
       <section className="g4 gp-15 tab-row rel" ref={itemRef}>
         {products.length === 0 ? (
-          <div className="parent-spinner">
-            <div className="spinner"></div>
-          </div>
+          <Spinner spin={true} />
         ) : (
           products.map((product) => {
             return (

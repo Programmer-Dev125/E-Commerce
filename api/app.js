@@ -59,13 +59,18 @@ const contactModel = mongoose.model(
   process.env.CONTACT
 );
 
-export default async function handleServer(req, res) {
-  await handleDb();
+// createServer(async (req, res) => {
 
-  res.setHeader(
-    "access-control-allow-origin",
-    "https://e-commerce-gamma-one-65.vercel.app"
-  );
+// }).listen(5000, "localhost");
+
+export default async function handleServer(req, res) {
+  try {
+    await handleDb();
+  } catch (err) {
+    console.log("error connecting to database");
+  }
+
+  res.setHeader("access-control-allow-origin", "http://localhost:5173");
   res.setHeader("access-control-allow-methods", "GET, POST, DELETE");
   res.setHeader(
     "access-control-allow-headers",
