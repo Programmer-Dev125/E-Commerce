@@ -39,7 +39,7 @@ export default function CartModel() {
   function handleDelete(id, name) {
     dispatch(onSpin());
     handleRemoveCart(id, name, bio).then((resp) => {
-      dispatch(removeCart({ id: id }));
+      dispatch(removeCart(id));
       dispatch(onSpin());
       dispatch(
         onResponse({
