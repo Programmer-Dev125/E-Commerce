@@ -35,7 +35,7 @@ export default function BuyProduct() {
                   {reviewIcons}
                 </div>
               </div>
-              <form className="col gp-30">
+              <form onSubmit={(e) => e.preventDefault()} className="col gp-30">
                 <div>
                   <label htmlFor="quantity" className="blc tx-14 mb10">
                     Quantity
